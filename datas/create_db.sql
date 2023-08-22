@@ -47,7 +47,6 @@ CREATE TABLE "doctors" (
     "address" TEXT,
     "photo" TEXT,
     "phone_number" phone NOT NULL UNIQUE,
-    "newsletter" BOOLEAN,
     "notification" BOOLEAN,
     "role_id" INTEGER REFERENCES roles("id"),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -56,14 +55,14 @@ CREATE TABLE "doctors" (
 
 CREATE TABLE "appointments" (
     "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "date" TIMESTAMPTZ,
-    "hour" TIMESTAMPTZ,
+    "date" TIMESTAMPTZ NOT NULL,
+    "hour" TIMESTAMPTZ NOT NULL,
     "status" TEXT NOT NULL,
-    "online" TEXT,
+    "online" TEXT NOT NULL,
     "reporting" TEXT,
     "exercices" TEXT,
-    "paid" TEXT,
-    "paiment_due" TEXT,
+    "paid" TEXT NOT NULL,
+    "paiment_due" TEXT NOT NULL,
     "paiment_value" TEXT,
     "client_id" INTEGER REFERENCES clients("id"),
     "doctor_id" INTEGER REFERENCES doctors("id"),
@@ -76,7 +75,8 @@ VALUES ('client'),
 ('admin');
 
 INSERT INTO "clients" ("firstname", "lastname","phone_number" , "password", "email", "dateofbirth", "address", "student", "role_id")
-VALUES ('Alexis', 'Marouf','0626904074' ,'coucou', 'alex@hotmail.fr', '15/07/1987', '19 avenue de la libération 77530 Voinsles',true, 1);
+VALUES ('Alexis', 'Marouf','0626904074' ,'coucou', 'alex@hotmail.fr', '15/07/1987', '19 avenue de la libération 77530 Voinsles',true, 1),
+('Michel', 'Dumas','0632587458' ,'coucou', 'michel@hotmail.fr', '30/03/1990', '6 rue du temple 94880 Noiseau',false, 1);
 
 
 INSERT INTO "doctors" ("firstname", "lastname", "email", "phone_number","password", "address", "role_id")
