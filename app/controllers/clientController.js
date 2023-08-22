@@ -2,6 +2,7 @@ import { hashMyPassword } from "../functions/bcrypt.js";
 import Client from "../models/Client.js";
 
 const clientController = {
+    
     getAllClients: async ( _, res) => {
         try {
 
@@ -13,6 +14,18 @@ const clientController = {
             console.error("Une erreur s'est produite :", error);
             res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données." });
         
+        }
+    },
+
+    getOneClient: async (req, res) => {
+        const { id } = req.params;
+
+        try {
+            const result = await Client.findByPk(id)
+            res.status(200).json(result)
+        } catch (error) {
+            console.error("Une erreur s'est produite :", error);
+            res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données." });
         }
     },
 
@@ -55,7 +68,7 @@ const clientController = {
         } catch (error) {
 
             console.error("Une erreur s'est produite :", error);
-            res.status(500).json({ error: "Une erreur s'est produite lors de la mise à jour du client." });
+            res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données.." });
         }
     },
 

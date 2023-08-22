@@ -9,17 +9,14 @@ Appointment.init(
             type: DataTypes.TIME,
             allowNull: false,
         },
-        hour: {
-            type: DataTypes.TIME,
-            allowNull: false,
-        },
         status: {
             type: DataTypes.STRING,
             allowNull: false,
         },
         online: {
-            type: DataTypes.STRING,
+            type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: false,
         },
         reporting: {
             type: DataTypes.STRING,
@@ -30,16 +27,17 @@ Appointment.init(
             allowNull: true,
         },
         paid: {
-            type: DataTypes.STRING,
+            type: DataTypes.BOOLEAN,
             allowNull: false,
         },
         paiment_due: {
-            type: DataTypes.STRING,
+            type: DataTypes.NUMBER,
             allowNull: false,
         },
         paiment_value: {
-            type: DataTypes.BOOLEAN,
+            type: DataTypes.NUMBER,
             allowNull: true,
+            defaultValue: 0,
         },
         client_id: {
             type: DataTypes.INTEGER,
