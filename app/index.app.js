@@ -1,5 +1,5 @@
 import express from "express";
-import router from "./router/router.js"
+import router from "./views/router.js";
 //import doc from "./doc/swagger.doc.js";
 // import errorMiddleware from "./helpers/error.middleware.js";
 import cors from "cors";

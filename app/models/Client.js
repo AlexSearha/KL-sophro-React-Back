@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../views/database";
+import sequelize from "../views/database.js";
 
 class Client extends Model {}
 
@@ -45,12 +45,13 @@ Client.init(
             type: DataTypes.BOOLEAN,
             allowNull: true,
         },
-        notifications: {
+        notification: {
             type: DataTypes.BOOLEAN, 
             allowNull: true,
         },
         role_id: {
             type: DataTypes.INTEGER,
+            defaultValue: 1,
         }
     }, 
     {

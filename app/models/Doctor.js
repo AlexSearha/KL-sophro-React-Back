@@ -1,11 +1,11 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../views/database";
+import sequelize from "../views/database.js";
 
 class Doctor extends Model {}
 
 Doctor.init(
     {
-        fisrtname: {
+        firstname: {
             type: DataTypes.STRING,
             allowNull: true,
         },
@@ -37,7 +37,7 @@ Doctor.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        notifications: {
+        notification: {
             type: DataTypes.BOOLEAN,
             allowNull: true,
         },

@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../views/database";
+import sequelize from "../views/database.js";
 
 class Appointment extends Model {}
 
