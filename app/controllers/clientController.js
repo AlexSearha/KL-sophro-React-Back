@@ -6,7 +6,9 @@ const clientController = {
     getAllClients: async ( _, res) => {
         try {
 
-            const result = await Client.findAll();
+            const result = await Client.findAll({
+                include: 'appointments'
+            });
             res.status(200).json(result);
 
         } catch (error) {
@@ -21,7 +23,9 @@ const clientController = {
         const { id } = req.params;
 
         try {
-            const result = await Client.findByPk(id)
+            const result = await Client.findByPk(id, {
+                include: ['appointments', 'role']
+            })
             res.status(200).json(result)
         } catch (error) {
             console.error("Une erreur s'est produite :", error);
@@ -32,7 +36,7 @@ const clientController = {
     addClient: async (req, res) => {
         const body = req.body;
         const password = req.body.password;
-        const passwordHash = await hashMyPassword(password);
+        const passwordHash = hashMyPassword(password);
         
         try {
 
@@ -49,20 +53,19 @@ const clientController = {
         }
     },
 
-    updateClient: async (req, res) => {
+    updateOneClient: async (req, res) => {
         const { id } = req.params;
-        const updatedFields = req.body;
+        const updateBody = req.body;
 
         try {
 
-            const updatedRowCount = await Client.update(updatedFields, {
+            const result = await Client.update(updateBody, {
                 where: { id: id }
             });
-            console.log(updatedRowCount);
-            if (updatedRowCount[0] === 0) {
-                res.status(404).json({ error: "Client non trouvé." });
-            } else {
+            if (result[0] === 1) {
                 res.status(200).json({ message: "Mise à jour réussie." });
+            } else {
+                res.status(404).json({ error: "Client non trouvé." });
             }
 
         } catch (error) {
@@ -72,7 +75,7 @@ const clientController = {
         }
     },
 
-    deleteClient: async (req, res) => {
+    deleteOneClient: async (req, res) => {
         const { id } = req.params;
         try {
 

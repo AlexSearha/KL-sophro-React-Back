@@ -1,12 +1,12 @@
 const { hashMyPassword } = require("../functions/bcrypt");
-const Doctor = require("../models/Doctor")
+const { Doctor, Role } = require("../models");
 
 const doctorController = {
     
     addDoctor : async (req, res) => {
         const body = req.body;
         const password = req.body.password;
-        const passwordHash = await hashMyPassword(password);
+        const passwordHash = hashMyPassword(password);
         try {
 
             const newClient = await Doctor.create(body);
@@ -26,9 +26,18 @@ const doctorController = {
         const { id } = req.params;
 
         try {
-            const result = await Doctor.findByPk(id)
-            res.status(200).json(result)
+
+            const result = await Doctor.findByPk(id, {
+                include: [{model: Role}]
+            })
+            if(result !== null){
+                res.status(200).json(result)
+            } else {
+                res.status(404).json({ error: "Praticien non trouvé." });
+            }
+
         } catch (error) {
+
             console.error("Une erreur s'est produite :", error);
             res.status(500).json({ error: "Une erreur s'est produite lors de la recherche du praticien." });
         }
@@ -43,7 +52,6 @@ const doctorController = {
             const updatedRowCount = await Doctor.update(updatedFields, {
                 where: { id: id }
             });
-            console.log(updatedRowCount);
             if (updatedRowCount[0] === 0) {
                 res.status(404).json({ error: "Praticien non trouvé." });
             } else {

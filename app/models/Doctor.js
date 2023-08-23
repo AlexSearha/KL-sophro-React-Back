@@ -43,6 +43,7 @@ Doctor.init(
         },
         role_id: {
             type: DataTypes.INTEGER,
+            defaultValue: 2,
         }
     }, 
     {

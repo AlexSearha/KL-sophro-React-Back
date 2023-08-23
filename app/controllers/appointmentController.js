@@ -1,11 +1,13 @@
-const { Appointment, Client } = require("../models");
+const { Appointment } = require("../models");
 
 const appointmentController = {
 
     getAllAppointments: async ( _, res) => {
         try {
 
-            const result = await Appointment.findAll()
+            const result = await Appointment.findAll({
+                include : 'client'
+            })
             res.status(200).json(result);
 
         } catch (error) {
@@ -20,9 +22,13 @@ const appointmentController = {
         const { id } = req.params;
         try {
             const result = await Appointment.findByPk(id, {
-                include: [ { model: Client, as: 'client'} ]
+                include: 'client'
             })
-            res.status(200).json(result);
+            if(result === null){
+                res.status(404).json({message : `Client non trouvé`});
+            } else {
+                res.status(200).json(result);
+            }
         } catch (error) {
             
             console.error("Une erreur s'est produite :", error);
@@ -32,27 +38,29 @@ const appointmentController = {
     },
     
     addNewAppointment: async (req, res) => {
+        const { id } = req.params;
         const body = req.body;
         try {
-            
-            const newAppointment = await Appointment.create(body);
-            // console.log(newAppointment);
-            res.status(200).json(newAppointment);  
-            
+            const addNewAppointment = await Appointment.create(body)
+            addNewAppointment.client_id = id;
+            await addNewAppointment.save();
+            console.log(addNewAppointment)
+            res.status(200).json({message : 'Nouveau rendez-vous créé'});
+
         } catch (error) {
-            
+
             console.error("Une erreur s'est produite :", error);
             res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données." });
             
         }
     },
     
-    updateAppointment: async (req, res) => {
+    updateOneAppointment: async (req, res) => {
         const { id } = req.params;
         const body = req.body;
         try {
             const result = Appointment.update(body, {
-                where: { id: id}
+                where: { id: id }
             })
             if(result[0] === 0){
                 res.status(404).json({ error: 'erreur dans la modification'});
@@ -66,6 +74,27 @@ const appointmentController = {
             
         }
         
+    },
+
+    deleteOneAppointment : async (req, res) => {
+        const { id } = req.params;
+        try {
+
+            const result = await Appointment.destroy({
+                where: { id: id }
+            });
+            if(result === 1){
+                res.status(200).json({ message: 'le rendez-vous a été éffacé'});
+            } else {
+                res.status(404).json({error: `le rendez vous n'a pas été trouvé`});
+            }
+
+        } catch (error) {
+            
+            console.error("Une erreur s'est produite :", error);
+            res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données." });
+            
+        }
     }
 };
 

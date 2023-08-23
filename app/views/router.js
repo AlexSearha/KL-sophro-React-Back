@@ -3,7 +3,6 @@ const clientController = require('../controllers/clientController');
 const doctorController = require('../controllers/doctorController');
 const appointmentController = require('../controllers/appointmentController');
 
-
 const router = Router();
 
 // Client
@@ -12,22 +11,26 @@ router.route('/client')
   .post(clientController.addClient);
 router.route('/client/:id(\\d+)')
   .get(clientController.getOneClient)
-  .patch(clientController.updateClient)
-  .delete(clientController.deleteClient);
+  .patch(clientController.updateOneClient)
+  .delete(clientController.deleteOneClient);
+  
+  // Doctor
+router.post('/doctor',doctorController.addDoctor);
 
-// Doctor
-router.post('/doctor',doctorController.addDoctor)
-router.route('/:id(\\d+)')
+router.route('/doctor/:id(\\d+)')
   .get(doctorController.getOneDoctor)
   .patch(doctorController.updateDoctor)
   .delete(doctorController.deleteDoctor);
+  
+  // Appointment
+router.get('/appointment',appointmentController.getAllAppointments);
 
-// Appointment
-router.route('/appointment')
-  .get(appointmentController.getAllAppointments)
-  .post(appointmentController.addNewAppointment)
 router.route('/appointment/:id(\\d+)')
   .get(appointmentController.getOneAppointment)
+  .patch(appointmentController.updateOneAppointment)
+  .delete(appointmentController.deleteOneAppointment);
+
+router.post('/client/:id(\\d+)/appointment', appointmentController.addNewAppointment);
   
 // Login
 router.post('/login', doctorController.addDoctor);

@@ -21,10 +21,12 @@ Appointment.init(
         reporting: {
             type: DataTypes.STRING,
             allowNull: true,
+            defaultValue: null,
         },
         exercices: {
             type: DataTypes.STRING,
             allowNull: true,
+            defaultValue: null,
         },
         paid: {
             type: DataTypes.BOOLEAN,

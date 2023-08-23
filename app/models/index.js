@@ -37,11 +37,11 @@ Client.belongsTo(Role, {
 });
 
 // Relation DOCTOR - ROLE
-Doctor.hasOne(Role, {
-    foreignKey: 'role_id'
+Role.hasOne(Doctor, {
+    foreignKey: 'role_id',
 });
 
-Role.hasOne(Doctor);
+Doctor.belongsTo(Role);
 
 
 module.exports = { Client, Appointment, Doctor, Role };
