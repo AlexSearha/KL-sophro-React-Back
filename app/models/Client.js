@@ -39,7 +39,7 @@ Client.init(
         },
         phone_number: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         newsletter: {
             type: DataTypes.BOOLEAN,

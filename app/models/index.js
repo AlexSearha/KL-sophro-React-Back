@@ -36,7 +36,7 @@ Client.belongsTo(Role, {
     as: 'role'
 });
 
-// Relation DOCTOR - ROLE
+// Relation ROLE - DOCTOR
 Role.hasOne(Doctor, {
     foreignKey: 'role_id',
 });

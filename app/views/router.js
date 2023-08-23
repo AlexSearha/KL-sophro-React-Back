@@ -2,6 +2,7 @@ const { Router } = require('express');
 const clientController = require('../controllers/clientController');
 const doctorController = require('../controllers/doctorController');
 const appointmentController = require('../controllers/appointmentController');
+const authController = require('../controllers/authController');
 
 const router = Router();
 
@@ -33,7 +34,7 @@ router.route('/appointment/:id(\\d+)')
 router.post('/client/:id(\\d+)/appointment', appointmentController.addNewAppointment);
   
 // Login
-router.post('/login', doctorController.addDoctor);
+router.post('/login', authController.login);
 
 
 module.exports = router;
