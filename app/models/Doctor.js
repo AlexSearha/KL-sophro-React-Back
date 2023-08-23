@@ -1,5 +1,5 @@
-import { DataTypes, Model } from "sequelize";
-import sequelize from "../views/database.js";
+const { DataTypes, Model } = require("sequelize");
+const sequelize = require("../views/database");
 
 class Doctor extends Model {}
 
@@ -51,4 +51,4 @@ Doctor.init(
     }
 );
 
-export default Doctor;
+module.exports = Doctor;

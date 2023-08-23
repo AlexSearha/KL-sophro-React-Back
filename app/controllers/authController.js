@@ -1,4 +1,3 @@
-import Client from "../models/Client.js";
 
 const authController = {
     
@@ -12,4 +11,4 @@ const authController = {
     }
 }
 
-export default authController;
+module.exports = authController;

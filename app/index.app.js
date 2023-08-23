@@ -1,9 +1,9 @@
-import express from "express";
-import router from "./views/router.js";
+const express =  require("express");
+const router = require("./views/router");
 //import doc from "./doc/swagger.doc.js";
 // import errorMiddleware from "./helpers/error.middleware.js";
-import cors from "cors";
-import multer from "multer";
+const cors = require("cors");
+const multer = require("multer");
 
 
 const app = express();
@@ -28,4 +28,4 @@ router.use((req, res) => {
 
 //doc(app);
 
-export default app;
+module.exports = app;

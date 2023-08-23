@@ -1,7 +1,8 @@
-import { Router } from "express";
-import clientController from "../controllers/clientController.js";
-import doctorController from "../controllers/doctorController.js";
-import appointmentController from "../controllers/appointmentController.js";
+const { Router } = require('express');
+const clientController = require('../controllers/clientController');
+const doctorController = require('../controllers/doctorController');
+const appointmentController = require('../controllers/appointmentController');
+
 
 const router = Router();
 
@@ -25,11 +26,12 @@ router.route('/:id(\\d+)')
 router.route('/appointment')
   .get(appointmentController.getAllAppointments)
   .post(appointmentController.addNewAppointment)
-
+router.route('/appointment/:id(\\d+)')
+  .get(appointmentController.getOneAppointment)
+  
 // Login
 router.post('/login', doctorController.addDoctor);
 
 
-
-export default router;
+module.exports = router;
 

@@ -2,7 +2,6 @@
   "name": "KL-sophro-React-Back",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
   "repository": "git@github.com:AlexSearha/KL-sophro-React-Back.git",
   "author": "Alexis Marouf",
   "license": "MIT",

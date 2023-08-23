@@ -1,5 +1,5 @@
-import { DataTypes, Model } from "sequelize";
-import sequelize from "../views/database.js";
+const { DataTypes, Model } = require("sequelize");
+const sequelize = require("../views/database");
 
 class Appointment extends Model {}
 
@@ -44,6 +44,7 @@ Appointment.init(
         },
         doctor_id: {
             type: DataTypes.INTEGER,
+            defaultValue: 1,
         },
     }, 
     {
@@ -52,4 +53,4 @@ Appointment.init(
     }
 );
 
-export default Appointment;
+module.exports = Appointment;

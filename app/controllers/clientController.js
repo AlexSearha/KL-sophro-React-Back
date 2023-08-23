@@ -1,5 +1,5 @@
-import { hashMyPassword } from "../functions/bcrypt.js";
-import Client from "../models/Client.js";
+const { hashMyPassword } = require("../functions/bcrypt");
+const { Client } = require('../models')
 
 const clientController = {
     
@@ -95,4 +95,4 @@ const clientController = {
 
 }
 
-export default clientController;
+module.exports = clientController;

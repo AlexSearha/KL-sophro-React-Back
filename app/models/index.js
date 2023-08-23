@@ -1,7 +1,7 @@
-import Appointment from "./Appointment";
-import Client from "./Client";
-import Doctor from "./Doctor";
-import Role from "./Role";
+const Appointment = require("./Appointment");
+const Client = require("./Client");
+const Doctor = require("./Doctor");
+const Role = require("./Role");
 
 // Relation CLIENT - APPOINTMENT
 Client.hasMany(Appointment, {
@@ -44,4 +44,4 @@ Doctor.hasOne(Role, {
 Role.hasOne(Doctor);
 
 
-export default { Client, Appointment, Doctor, Role }
+module.exports = { Client, Appointment, Doctor, Role };
