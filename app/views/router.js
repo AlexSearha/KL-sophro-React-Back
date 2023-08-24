@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const auth = require('../middleware/auth');
 const clientController = require('../controllers/clientController');
 const doctorController = require('../controllers/doctorController');
 const appointmentController = require('../controllers/appointmentController');
@@ -8,34 +9,40 @@ const router = Router();
 
 // Client
 router.route('/client')
-  .get(clientController.getAllClients)
+  .get(auth.authAccessTokenValidity,auth.isAdmin, clientController.getAllClients)
   .post(clientController.addClient);
 router.route('/client/:id(\\d+)')
-  .get(clientController.getOneClient)
-  .patch(clientController.updateOneClient)
-  .delete(clientController.deleteOneClient);
+  .get(auth.authAccessTokenValidity, clientController.getOneClient)
+  .patch(auth.authAccessTokenValidity, clientController.updateOneClient)
+  .delete(auth.authAccessTokenValidity ,clientController.deleteOneClient);
   
   // Doctor
-router.post('/doctor',doctorController.addDoctor);
+router.post('/doctor',auth.authAccessTokenValidity,auth.isAdmin, doctorController.addDoctor);
 
 router.route('/doctor/:id(\\d+)')
-  .get(doctorController.getOneDoctor)
-  .patch(doctorController.updateDoctor)
-  .delete(doctorController.deleteDoctor);
+  .get(auth.authAccessTokenValidity, doctorController.getOneDoctor)
+  .patch(auth.authAccessTokenValidity,auth.isAdmin, doctorController.updateDoctor)
+  .delete(auth.authAccessTokenValidity,auth.isAdmin, doctorController.deleteDoctor);
   
   // Appointment
-router.get('/appointment',appointmentController.getAllAppointments);
+router.get('/appointment',auth.authAccessTokenValidity, appointmentController.getAllAppointments);
 
 router.route('/appointment/:id(\\d+)')
-  .get(appointmentController.getOneAppointment)
-  .patch(appointmentController.updateOneAppointment)
-  .delete(appointmentController.deleteOneAppointment);
+  .get(auth.authAccessTokenValidity, appointmentController.getOneAppointment)
+  .patch(auth.authAccessTokenValidity, appointmentController.updateOneAppointment)
+  .delete(auth.authAccessTokenValidity ,appointmentController.deleteOneAppointment);
 
-router.post('/client/:id(\\d+)/appointment', appointmentController.addNewAppointment);
+router.post('/client/:id(\\d+)/appointment', auth.authAccessTokenValidity, appointmentController.addNewAppointment);
   
 // Login
-router.post('/login', authController.login);
+router.post('/login',authController.login);
 
+router.get('/loggout', authController.loggout);
+
+// 404
+router.get('*', ( _, res) => {
+  res.status(404)
+})
 
 module.exports = router;
 

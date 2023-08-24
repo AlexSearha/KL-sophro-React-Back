@@ -56,17 +56,26 @@ const clientController = {
     updateOneClient: async (req, res) => {
         const { id } = req.params;
         const updateBody = req.body;
+        console.log(updateBody.email);
 
         try {
 
-            const result = await Client.update(updateBody, {
-                where: { id: id }
-            });
-            if (result[0] === 1) {
-                res.status(200).json({ message: "Mise à jour réussie." });
+            const result = await Client.findByPk(id);
+
+            if(result === null){
+                return res.status(404).json({error: 'client non trouvé'});
+            } 
+            
+            if(updateBody.email && result.dataValues.email !== updateBody.email){
+                res.status(401).json({error: 'Mise à jour email interdite'});
+
             } else {
-                res.status(404).json({ error: "Client non trouvé." });
+                await result.update(updateBody);
+                await result.save();
+                res.status(200).json({message: 'Modifications éffectuées'});
+
             }
+            
 
         } catch (error) {
 
