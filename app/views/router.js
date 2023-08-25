@@ -45,10 +45,10 @@ router.get('/loggout', authController.loggout);
 router.get('/confirm/:token', auth.confirmSubscription)
 
 // Reinit Password
-router.post('/reset-password');
+router.post('/reset-password', authController.sendTokenByEmail);
 router.route('/reset-password/:token')
-  .get(authController.checkTokenBeforeReinitPassword)
-  .post(authController.reinitPassword);
+  .get(authController.checkTokenBeforeResetPassword)
+  .post(authController.resetPassword);
 
 // 404
 router.get('*', ( _, res) => {

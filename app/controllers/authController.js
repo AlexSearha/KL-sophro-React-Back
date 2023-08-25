@@ -69,7 +69,7 @@ const authController = {
     const { email } = req.body;
 
     try {
-      
+
       await emailReinitPassword(email);
       res.status(200).json({ message : 'email sent successfully'});
 
@@ -81,7 +81,7 @@ const authController = {
     }
   } ,
 
-  checkTokenBeforeReinitPassword: async (req, res) => {
+  checkTokenBeforeResetPassword: async (req, res) => {
     const { token } = req.params;
     
     try {
@@ -110,7 +110,7 @@ const authController = {
     }
   },
 
-  reinitPassword: async (req, res) => {
+  resetPassword: async (req, res) => {
     const { token } = req.params;
     const { password } = req.body;
 
