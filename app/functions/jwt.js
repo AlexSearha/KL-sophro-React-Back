@@ -5,7 +5,7 @@ const REFRESHSECRETPHRASE = process.env.JWT_ACCESS_SECRET;
 const EMAILCONFIRMATIONPHRASE = process.env.JWT_EMAIL_CONFIRM_SECRET;
 
 function generateLoginToken(data) {
-    const {email, id, role_id } = data;
+    const { email, id, role_id } = data;
     
     const accessToken = jwt.sign({
         id: id,
@@ -23,13 +23,26 @@ function generateLoginToken(data) {
 }
 
 function generateEmailConfirmationToken(data){
-  const {email, id, role_id } = data;
+  const { email, id } = data;
 
   return jwt.sign({
     id: id,
     email: email,
-    role: role_id
-  }, EMAILCONFIRMATIONPHRASE , { expiresIn: '1800' });
+  }, EMAILCONFIRMATIONPHRASE , { expiresIn: 5 * 60 });
 }
 
-module.exports = { generateLoginToken, generateEmailConfirmationToken }
+async function confirmToken(tokenToCheck){
+  console.log('TOken a decoder',tokenToCheck);
+  return new Promise( (resolve, reject) => {
+    jwt.verify(tokenToCheck, EMAILCONFIRMATIONPHRASE, (err, decoded) => {
+      if(err){
+        reject('JWT expired');
+      }
+      if(decoded){
+        resolve(decoded);
+      }
+    })
+  })
+}
+
+module.exports = { generateLoginToken, generateEmailConfirmationToken, confirmToken }

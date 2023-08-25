@@ -8,7 +8,11 @@ const authController = {
     const { email, password } = req.body;
 
     if (req.headers['authorization'] !== undefined) {
-      return res.status(200).json({ message: 'Utilisateur déjà authentifié' });
+      return res.status(200).json({ message: 'user already authentified' });
+    }
+
+    if(!email || !password){
+      return res.status(404).json({error: 'email or password missing'})
     }
 
     try {
@@ -23,7 +27,7 @@ const authController = {
       });
 
       if (!findClient && !findDoctor) {
-        return res.status(404).json({ error: 'Aucun utilisateur trouvé' });
+        return res.status(404).json({ error: 'user not found' });
       }
 
       const user = findClient || findDoctor;
@@ -31,7 +35,7 @@ const authController = {
       const isPasswordCorrect = checkMyPasssword(password, user.password);
 
       if (!isPasswordCorrect) {
-        return res.status(401).json({ error: 'Mot de passe incorrect' });
+        return res.status(401).json({ error: 'wrong passord' });
       }
 
       const userTokens = generateLoginToken(user.dataValues);

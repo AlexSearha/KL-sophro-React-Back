@@ -49,6 +49,11 @@ Client.init(
             type: DataTypes.BOOLEAN, 
             allowNull: true,
         },
+        confirmed: {
+            type: DataTypes.BOOLEAN, 
+            allowNull: false,
+            defaultValue: false,
+        },
         role_id: {
             type: DataTypes.INTEGER,
             defaultValue: 1,

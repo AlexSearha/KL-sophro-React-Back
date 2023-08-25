@@ -31,6 +31,7 @@ CREATE TABLE "clients" (
     "phone_number" phone NOT NULL,
     "newsletter" BOOLEAN,
     "notification" BOOLEAN,
+    "confirmed" BOOLEAN,
     "role_id" INTEGER REFERENCES roles("id"),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ
@@ -48,6 +49,7 @@ CREATE TABLE "doctors" (
     "photo" TEXT,
     "phone_number" phone NOT NULL,
     "notification" BOOLEAN,
+    "confirmed" BOOLEAN,
     "role_id" INTEGER REFERENCES roles("id"),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ
@@ -73,12 +75,11 @@ INSERT INTO "roles" ("name")
 VALUES ('client'),
 ('admin');
 
-INSERT INTO "clients" ("firstname", "lastname","phone_number" , "password", "email", "dateofbirth", "address", "student", "role_id")
-VALUES ('Alexis', 'Marouf','0626904074' ,'coucou', 'alex@hotmail.fr', '15/07/1987', '19 avenue de la libération 77530 Voinsles',true, 1),
-('Michel', 'Dumas','0632587458' ,'coucou', 'michel@hotmail.fr', '30/03/1990', '6 rue du temple 94880 Noiseau',false, 1);
+INSERT INTO "clients" ("firstname", "lastname","phone_number" , "password", "email", "dateofbirth", "address", "student", "confirmed", "role_id")
+VALUES ('Michel', 'Dumas','0632587458' ,'coucou', 'michel@hotmail.fr', '30/03/1990', '6 rue du temple 94880 Noiseau',false, true, 1);
 
 
-INSERT INTO "doctors" ("firstname", "lastname", "email", "phone_number","password", "address", "role_id")
-VALUES ('Katia', 'Lemaire', 'test@hotmail.fr','0656565656', 'coucou', '22 rue des tisserands 56190 Noyal-Muzillac',2);
+INSERT INTO "doctors" ("firstname", "lastname", "email", "phone_number","password", "address","confirmed", "role_id")
+VALUES ('Katia', 'Lemaire', 'test@hotmail.fr','0656565656', 'coucou', '22 rue des tisserands 56190 Noyal-Muzillac',true ,2);
 
 COMMIT;

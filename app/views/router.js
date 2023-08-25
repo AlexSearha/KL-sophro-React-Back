@@ -14,7 +14,8 @@ router.route('/client')
 router.route('/client/:id(\\d+)')
   .get(auth.authAccessTokenValidity, clientController.getOneClient)
   .patch(auth.authAccessTokenValidity, clientController.updateOneClient)
-  .delete(auth.authAccessTokenValidity ,clientController.deleteOneClient);
+  // .delete(auth.authAccessTokenValidity ,clientController.deleteOneClient);
+  .delete(clientController.deleteOneClient);
   
   // Doctor
 router.post('/doctor',auth.authAccessTokenValidity,auth.isAdmin, doctorController.addDoctor);
@@ -37,7 +38,11 @@ router.post('/client/:id(\\d+)/appointment', auth.authAccessTokenValidity, appoi
 // Login
 router.post('/login',authController.login);
 
+// Loggout
 router.get('/loggout', authController.loggout);
+
+// Confirm Subscription
+router.get('/confirm/:token', auth.confirmSubscription)
 
 // 404
 router.get('*', ( _, res) => {

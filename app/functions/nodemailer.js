@@ -14,13 +14,13 @@ const transporter = nodemailer.createTransport({
 });
 
 // async..await is not allowed in global scope, must use a wrapper
-async function emailConfirmationSubscribeToken(emailTo, token) {
+async function emailConfirmSubscribeToken(emailTo, token) {
   // send mail with defined transport object
   const info = await transporter.sendMail({
     from: '"Katia Lemaire" <contact@mytechcompanion.fr>', // sender address
     to: emailTo, // list of receivers
     subject: "Katia Lemaire Sophrologue : CONFIRMEZ VOTRE COMPTE", // Subject line
-    html:     `<p>Bonjour,</p><br><p>Pour confirmer votre compte, veuillez cliquer sur le lien suivant : <span><a href="http://localhost:3000/subscribe/${token}">http://localhost:3000/subscribe/${token}</a></span></p><br><p>Cordialement,</p><br><p>Katia Lemaire Sophrologue<br>22 rue des tisserands, 56190 Noyal-Muzillac<br>Tel: 07.60.31.10.52</p>`, // html body
+    html:     `<p>Bonjour,</p><br><p>Pour confirmer votre compte, veuillez cliquer sur le lien suivant : <span><a href="http://localhost:3000/confirm/${token}">http://localhost:3000/confirm/${token}</a></span></p><br><p>Cordialement,</p><br><p>Katia Lemaire Sophrologue<br>22 rue des tisserands, 56190 Noyal-Muzillac<br>Tel: 07.60.31.10.52</p>`, // html body
   });
 
   console.log("Message sent: %s", info.messageId);
@@ -33,6 +33,6 @@ async function emailConfirmationSubscribeToken(emailTo, token) {
   //
 }
 
-module.exports = { emailConfirmationSubscribeToken };
+module.exports = { emailConfirmSubscribeToken };
 
 // emailConfirmationSubscribeToken().catch(console.error);

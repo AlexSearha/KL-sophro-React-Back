@@ -1,4 +1,6 @@
 const { hashMyPassword } = require("../functions/bcrypt");
+const { generateEmailConfirmationToken } = require("../functions/jwt");
+const { emailConfirmSubscribeToken } = require("../functions/nodemailer");
 const { Client } = require('../models')
 
 const clientController = {
@@ -35,7 +37,7 @@ const clientController = {
 
     addClient: async (req, res) => {
         const body = req.body;
-        const password = req.body.password;
+        const { email, password } = req.body;
         const passwordHash = hashMyPassword(password);
         
         try {
@@ -43,6 +45,8 @@ const clientController = {
             const newClient = await Client.create(body);
             newClient.password = passwordHash;
             await newClient.save();
+            const tokenConfirmToSend = generateEmailConfirmationToken(body)
+            await emailConfirmSubscribeToken(email, tokenConfirmToSend);
             res.status(200).json({ message: "Client créé avec succès"})   
             
         } catch (error) {
