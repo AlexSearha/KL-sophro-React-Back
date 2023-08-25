@@ -79,7 +79,6 @@ const clientController = {
                 res.status(200).json({message: 'Modifications éffectuées'});
 
             }
-            
 
         } catch (error) {
 
@@ -90,15 +89,25 @@ const clientController = {
 
     deleteOneClient: async (req, res) => {
         const { id } = req.params;
+        const { role } = req.user;
+
         try {
 
-            const clientId = await Client.destroy({
-                where: { id: id }
-            });
-            if (clientId === 1){
-                res.status(200).json({ message : 'le client a bien été effacé'});
+            const client = await Client.findByPk(id);
+
+            if(role !== 2){
+                if(client.dataValues.id === id){
+                    await client.destroy();
+                    res.status(200).json({message: 'client successfully deleted'});
+                    
+                } else {
+                    
+                    return res.status(401).json({error: 'unauthorized action'});
+                }
             } else {
-                res.status(404).json({ error: 'client non trouvé.'})
+                await client.destroy();
+                res.status(200).json({message: 'client successfully deleted'});
+                
             }
 
         } catch (error) {

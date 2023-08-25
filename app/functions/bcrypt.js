@@ -7,8 +7,8 @@ function hashMyPassword(myPasswordToHash){
     return bcrypt.hashSync( myPasswordToHash, SALT)
 }
 
-function checkMyPasssword(passwordToCompare, truePassword){
+function checkMyPassword(passwordToCompare, truePassword){
     return bcrypt.compareSync(passwordToCompare, truePassword)
 }
 
-module.exports = { hashMyPassword, checkMyPasssword }
+module.exports = { hashMyPassword, checkMyPassword }

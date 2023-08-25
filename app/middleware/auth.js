@@ -11,15 +11,14 @@ const auth = {
         const authentification = req.headers['authorization'];
         const token = authentification && authentification.split(' ')[1];
         if(token === undefined){
-            return res.status(401).json({error: 'token absent'});
+            return res.status(401).json({error: 'missing token'});
         }
         
         console.log('Verification du token : ');
         jwt.verify(token, ACCESSSECRETPHRASE, (err, user) => {
-            // console.log('Phrase secrete : ',ACCESSSECRETPHRASE);
-            // console.log('on rentre dans la fonction de vérification JWT');
+
             if (err){
-                return res.status(401).json({error: 'token non valide'});
+                return res.status(401).json({error: 'unvalid token'});
             }
                 // TODO
                 req.user = user;
@@ -65,6 +64,10 @@ const auth = {
             res.status(400).json({ error: 'expired token' });   
         }
 
+    },
+
+    changePasswordAfterToken: (req, res) => {
+        
     }
 
     // authRefreshTokenValidity : (req, res, next) => {
