@@ -17,4 +17,24 @@ Le site Katia Lemaire Sophrologue est site déstinée à la prise de rendez-vous
 
 ## Installation de l'API
 
-```yarn dev```
+### Installation des dépendances
+
+```eng
+yarn 
+yarn dev
+```
+
+### Installation de la base de données
+
+ouvrir un terminal =>
+
+```eng
+sudo -i -u postgres psql
+
+CREATE DATABASE xxx OWNER xxx;
+
+\q
+
+psql -U nomDeLutilisateur -d nomDeLaBase -f create_db.sql
+```
+*le fichier **create_db.sql** se trouve dans le dossier "data"*
