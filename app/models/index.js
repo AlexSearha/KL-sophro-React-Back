@@ -25,15 +25,13 @@ Protocol.belongsTo(Doctor, {
 });
 
 // Relation PROTOCOL - APPOINTMENT
-Protocol.belongsToMany(Appointment, {
-    through: "protocols_has_appointments",
+Protocol.hasMany(Appointment, {
     foreignKey: "protocol_id",
     as: "appointments"
 });
-Appointment.belongsToMany(Protocol, {
-    through: "protocols_has_appointments",
+Appointment.belongsTo(Protocol, {
     foreignKey: "appointment_id",
-    as: "protocols"
+    as: "protocol"
 })
 
 // Relation ROLE - CLIENT

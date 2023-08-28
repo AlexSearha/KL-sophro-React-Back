@@ -41,12 +41,9 @@ Appointment.init(
             type: DataTypes.NUMBER,
             allowNull: true,
         },
-        client_id: {
+        protocol_id: {
             type: DataTypes.INTEGER,
-        },
-        doctor_id: {
-            type: DataTypes.INTEGER,
-            defaultValue: 1,
+            allowNull: false,
         },
     }, 
     {

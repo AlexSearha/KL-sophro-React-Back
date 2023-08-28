@@ -1,6 +1,6 @@
 BEGIN;
 
-DROP TABLE IF EXISTS "roles", "clients", "doctors", "protocols", "appointments", "protocols_has_appointments";
+DROP TABLE IF EXISTS "roles", "clients", "doctors", "protocols", "appointments";
 
 CREATE DOMAIN "rfc_email" AS TEXT
 CHECK (value ~ '^(?:[a-z0-9!#$%&''*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&''*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$');
@@ -74,17 +74,9 @@ CREATE TABLE "appointments" (
     "paid" BOOLEAN NOT NULL,
     "paiment_due" DECIMAL NOT NULL,
     "paiment_value" DECIMAL,
+    "protocol_id" INTEGER REFERENCES "protocols"("id"),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ
-);
-
-CREATE TABLE "protocols_has_appointments" (
-    "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "protocole_id" INTEGER REFERENCES "protocols"("id"),
-    "appointment_id" INTEGER REFERENCES "appointments"("id"),
-    "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    "updated_at" TIMESTAMPTZ,
-    UNIQUE ("appointment_id", "protocole_id")
 );
 
 INSERT INTO "roles" ("name")
@@ -109,12 +101,5 @@ VALUES ('2023-08-30 08:00:00.828+02', 'reservé', 50, 50),
 ('2023-09-22 16:00:00.828+02', 'reservé', 50, 50), 
 ('2023-09-25 18:00:00.828+02', 'reservé', 40, 40), 
 
-INSERT INTO "protocoles_has_appointments" ("protocol_id", "appointments_id")
-VALUES 
-(1,1),
-(1,2),
-(1,3),
-(2,4),
-(2,5);
 
 COMMIT;
