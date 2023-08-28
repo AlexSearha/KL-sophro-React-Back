@@ -35,7 +35,7 @@ const clientController = {
         }
     },
 
-    addClient: async (req, res) => {
+    addNewClient: async (req, res) => {
         const body = req.body;
         const { email, password } = req.body;
         const passwordHash = hashMyPassword(password);

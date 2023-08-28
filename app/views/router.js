@@ -4,20 +4,26 @@ const clientController = require('../controllers/clientController');
 const doctorController = require('../controllers/doctorController');
 const appointmentController = require('../controllers/appointmentController');
 const authController = require('../controllers/authController');
+const sanitize = require('../middleware/sanitize');
 
 const router = Router();
 
-// Client
+// SANITIZE ALL ROUTES
+router.route('*')
+  .post(sanitize)
+  .patch(sanitize);
+
+// CLIENT
 router.route('/client')
   .get(auth.authAccessTokenValidity,auth.isAdmin, clientController.getAllClients)
-  .post(clientController.addClient);
+  .post(clientController.addNewClient);
+
 router.route('/client/:id(\\d+)')
   .get(auth.authAccessTokenValidity, clientController.getOneClient)
   .patch(auth.authAccessTokenValidity, clientController.updateOneClient)
   .delete(auth.authAccessTokenValidity ,clientController.deleteOneClient);
-  // .delete(clientController.deleteOneClient);
   
-  // Doctor
+  // DOCTOR
 router.post('/doctor',auth.authAccessTokenValidity,auth.isAdmin, doctorController.addDoctor);
 
 router.route('/doctor/:id(\\d+)')
@@ -25,7 +31,7 @@ router.route('/doctor/:id(\\d+)')
   .patch(auth.authAccessTokenValidity,auth.isAdmin, doctorController.updateDoctor)
   .delete(auth.authAccessTokenValidity,auth.isAdmin, doctorController.deleteDoctor);
   
-  // Appointment
+  // APPOINTMENT
 router.get('/appointment',auth.authAccessTokenValidity, appointmentController.getAllAppointments);
 
 router.route('/appointment/:id(\\d+)')
@@ -35,24 +41,24 @@ router.route('/appointment/:id(\\d+)')
 
 router.post('/client/:id(\\d+)/appointment', auth.authAccessTokenValidity, appointmentController.addNewAppointment);
   
-// Login
+// LOGIN
 router.post('/login',authController.login);
 
-// Loggout
+// LOGGOUT
 router.get('/loggout', authController.loggout);
 
-// Confirm Subscription
+// CONFIRMATION SUBSCRIPTION
 router.get('/confirm/:token', auth.confirmSubscription)
 
-// Reinit Password
+// RESET PASSWORD
 router.post('/reset-password', authController.sendTokenByEmail);
 router.route('/reset-password/:token')
   .get(authController.checkTokenBeforeResetPassword)
   .post(authController.resetPassword);
 
-// 404
+// 404 PAGE
 router.get('*', ( _, res) => {
-  res.status(404)
+  res.status(404).json
 })
 
 module.exports = router;

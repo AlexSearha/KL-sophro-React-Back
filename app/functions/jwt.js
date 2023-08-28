@@ -28,11 +28,10 @@ function generateEmailConfirmationToken(data){
   return jwt.sign({
     id: id,
     email: email,
-  }, EMAILCONFIRMATIONPHRASE , { expiresIn: 5 * 60 });
+  }, EMAILCONFIRMATIONPHRASE , { expiresIn: 20 * 60 });
 }
 
 async function confirmToken(tokenToCheck){
-  console.log('TOken a decoder',tokenToCheck);
   return new Promise( (resolve, reject) => {
     jwt.verify(tokenToCheck, EMAILCONFIRMATIONPHRASE, (err, decoded) => {
       if(err){

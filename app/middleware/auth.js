@@ -64,28 +64,7 @@ const auth = {
             res.status(400).json({ error: 'expired token' });   
         }
 
-    },
-
-    changePasswordAfterToken: (req, res) => {
-        
     }
-
-    // authRefreshTokenValidity : (req, res, next) => {
-    //     const authentification = req.headers['authorization'];
-    //     const token = authentification && authentification.split(' ')[1];
-    
-    //     if(!token){
-    //         return res.sendStatus(401);
-    //     }
-    
-    //     jwt.verify(token, REFRESHSECRETPHRASE, (err, user) => {
-    //         if (err){
-    //             return res.sendStatus(401);
-    //         }
-    //             req.user = user;
-    //             next();
-    //     })
-    // }
 };
 
 module.exports = auth;
