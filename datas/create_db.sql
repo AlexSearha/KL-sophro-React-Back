@@ -58,7 +58,6 @@ CREATE TABLE "protocols" (
     "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "name" TEXT NOT NULL,
     "description" TEXT,
-    "client_id" INTEGER REFERENCES "clients"("id"),
     "doctor_id" INTEGER REFERENCES "doctors"("id"),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ
@@ -74,6 +73,8 @@ CREATE TABLE "appointments" (
     "paid" BOOLEAN NOT NULL,
     "paiment_due" DECIMAL NOT NULL,
     "paiment_value" DECIMAL,
+    "client_id" INTEGER REFERENCES "cients"("id"),
+    "doctor_id" INTEGER REFERENCES "doctors"("id"),
     "protocol_id" INTEGER REFERENCES "protocols"("id"),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ

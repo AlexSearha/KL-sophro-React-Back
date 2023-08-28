@@ -41,10 +41,20 @@ Appointment.init(
             type: DataTypes.NUMBER,
             allowNull: true,
         },
-        protocol_id: {
+        client_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        doctor_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 1,
+        },
+        protocol_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        
     }, 
     {
         sequelize,

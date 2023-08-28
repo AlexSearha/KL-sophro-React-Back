@@ -4,35 +4,45 @@ const Doctor = require("./Doctor");
 const Protocol = require("./Protocols");
 const Role = require("./Role");
 
-// Relation CLIENT - PROTOCOL
-Client.hasMany(Protocol, {
-    foreignKey: "client_id",
-    as: "protocols"
+// Relation CLIENT - APPOINTMENT
+Client.hasMany(Appointment, {
+    foreignKey: 'client_id',
+    as: 'appointments'
 });
-Protocol.belongsTo(Client, {
-    foreignKey: "client_id",
-    as: "client"
-})
+Appointment.belongsTo(Client, {
+    foreignKey: 'client_id',
+    as: 'client'
+});
+
+// Relation DOCTOR - APPOINTMENT
+Doctor.hasMany(Appointment, {
+    foreignKey: 'doctor_id',
+    as: 'appointments'
+});
+Appointment.belongsTo(Doctor, {
+    foreignKey: 'doctor_id',
+    as: 'doctor'
+});
 
 // Relation DOCTOR - PROTOCOL
 Doctor.hasMany(Protocol, {
-    foreignKey: "doctor_id",
-    as: "protocols"
+    foreignKey: 'doctor_id',
+    as: 'protocols'
 });
 Protocol.belongsTo(Doctor, {
-    foreignKey: "doctor_id",
-    as: "doctor"
+    foreignKey: 'doctor_id',
+    as: 'doctor'
 });
 
 // Relation PROTOCOL - APPOINTMENT
 Protocol.hasMany(Appointment, {
-    foreignKey: "protocol_id",
-    as: "appointments"
+    foreignKey: 'protocol_id',
+    as: 'appointments'
 });
 Appointment.belongsTo(Protocol, {
-    foreignKey: "appointment_id",
-    as: "protocol"
-})
+    foreignKey: 'protocol_id',
+    as: 'protocols'
+});
 
 // Relation ROLE - CLIENT
 Role.hasMany(Client, {

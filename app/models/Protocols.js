@@ -13,13 +13,10 @@ Protocol.init(
             type: DataTypes.STRING,
             allowNull: true,
         },
-        client_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
         doctor_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            defaultValue: 1,
         },
     }, 
     {
