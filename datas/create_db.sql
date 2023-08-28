@@ -91,16 +91,16 @@ VALUES ('Michel', 'Dumas','0632587458' ,'coucou', 'michel@hotmail.fr', '30/03/19
 INSERT INTO "doctors" ("firstname", "lastname", "email", "phone_number","password", "address","confirmed", "role_id")
 VALUES ('Alex', 'Mirouf', 'mirouf@hotmail.fr','0656565656', 'coucou', '22 rue des tisserands 56190 Noyal-Muzillac',true ,2);
 
-INSERT VALUES "protocols" ("name", "description", "doctor_id")
+INSERT INTO "protocols" ("name", "description", "doctor_id")
 VALUES ('cigarette', 'le client est venu me voir pour travailler pour arreter de fumer',1),
 ('sommeil', 'le client à des problemes de sommeil',1);
 
-INSERT INTO "appointments" ("date","status","paiment_due", "paiment_value", "client_id", "doctor_id", "protocol_id")
-VALUES ('2023-08-30 08:00:00.828+02', 'reservé', 50, 50, 1, 1, 1), 
-('2023-09-20 16:00:00.828+02', 'reservé', 50, 50, 1, 1 ,1), 
-('2023-09-21 16:00:00.828+02', 'reservé', 40, 40, 1, 1, 2), 
-('2023-09-22 16:00:00.828+02', 'reservé', 50, 50, 1, 1, 2), 
-('2023-09-25 18:00:00.828+02', 'reservé', 40, 40, 1, 1, 2), 
+INSERT INTO "appointments" ("date","status", "online", "paid", "paiment_due", "paiment_value", "client_id", "doctor_id", "protocol_id")
+VALUES ('2023-08-30 08:00:00.828+02', 'reservé', false, false, 50, 50, 1, 1, 1), 
+('2023-09-20 16:00:00.828+02', 'reservé', false, false, 50, 50, 1, 1 ,1), 
+('2023-09-21 16:00:00.828+02', 'reservé', false, false, 40, 40, 1, 1, 2), 
+('2023-09-22 16:00:00.828+02', 'reservé', false, false, 50, 50, 1, 1, 2), 
+('2023-09-25 18:00:00.828+02', 'reservé', false, false, 40, 40, 1, 1, 2); 
 
 
 COMMIT;

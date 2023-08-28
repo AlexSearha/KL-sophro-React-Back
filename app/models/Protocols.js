@@ -1,7 +1,16 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require('../views/database');
 
-class Protocol extends Model {}
+class Protocol extends Model {
+
+    async removeFromProtocol(appointment) {
+        await this.removeAppointment(appointment);
+    } 
+
+    async addToProtocol(appointment) {
+        await this.addAppointment(appointment);
+    }
+}
 
 Protocol.init(
     {

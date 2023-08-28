@@ -1,4 +1,4 @@
-const { Appointment } = require("../models");
+const { Appointment, Protocol } = require("../models");
 
 const appointmentController = {
 
@@ -89,6 +89,59 @@ const appointmentController = {
                 res.status(404).json({error: `le rendez vous n'a pas été trouvé`});
             }
 
+        } catch (error) {
+            
+            console.error("Une erreur s'est produite :", error);
+            res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données." });
+            
+        }
+    },
+
+    addToProtocol: async (req, res) => {
+        const { protocolId } = req.params;
+        const { appointmentId } = req.body;
+        
+        try {
+            const protocol = await Protocol.findByPk(protocolId);
+            if(!protocol){
+                return res.status(404).json({error: 'user not found'});
+            }
+            
+            const appointment = await Appointment.findByPk(appointmentId, {include: 'protocols'});
+            if (!appointment){
+                return res.status(404).json({error: 'appointment not found'});
+            }
+            
+            await protocol.addToProtocol(appointment);
+            await protocol.reload();
+            res.status(200).json(protocol);
+            
+        } catch (error) {
+            
+            console.error("Une erreur s'est produite :", error);
+            res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données." });
+            
+        }
+    },
+    
+    removeFromProtocol: async (req, res) => {
+        const { appointmentId, protocolId } = req.params;
+
+        try {
+            const protocol = await Protocol.findByPk(protocolId, {include: "appointments"});
+            if(!protocol){
+                return res.status(404).json({error: 'user not found'});
+            }
+
+            const appointment = await Appointment.findByPk(appointmentId);
+            if(!appointment){
+                return res.status(404).json({error: 'appointment not found'});
+            }
+            
+            await protocol.removeFromProtocol(appointment);
+            await protocol.reload();
+            res.json(protocol);
+            
         } catch (error) {
             
             console.error("Une erreur s'est produite :", error);

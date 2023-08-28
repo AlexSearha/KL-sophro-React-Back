@@ -4,6 +4,7 @@ const clientController = require('../controllers/clientController');
 const doctorController = require('../controllers/doctorController');
 const appointmentController = require('../controllers/appointmentController');
 const authController = require('../controllers/authController');
+const protocolController = require('../controllers/protocolController');
 const sanitize = require('../middleware/sanitize');
 
 const router = Router();
@@ -40,7 +41,22 @@ router.route('/appointment/:id(\\d+)')
   .delete(auth.authAccessTokenValidity ,appointmentController.deleteOneAppointment);
 
 router.post('/client/:id(\\d+)/appointment', auth.authAccessTokenValidity, appointmentController.addNewAppointment);
-  
+// Add an appointment to a protocol
+router.post('/protocol/:protocolId/appointment', appointmentController.addToProtocol);
+// Delete an appointment to a protocol
+router.delete('/protocol/:protocolId/appointment/:appointmentId', appointmentController.removeFromProtocol);
+
+
+// PROTOCOL
+router.get('/protocol',protocolController.getAllProtocols);
+
+router.route('/protocol/:id(\\d+)')
+.get(protocolController.getOneProtocol)
+.post(protocolController.addNewProtocol)
+.patch(protocolController.updateOneProtocol)
+.delete(protocolController.deleteOneProtocol);
+
+
 // LOGIN
 router.post('/login',authController.login);
 
@@ -52,6 +68,7 @@ router.get('/confirm/:token', auth.confirmSubscription)
 
 // RESET PASSWORD
 router.post('/reset-password', authController.sendTokenByEmail);
+
 router.route('/reset-password/:token')
   .get(authController.checkTokenBeforeResetPassword)
   .post(authController.resetPassword);
