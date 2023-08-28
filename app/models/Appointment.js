@@ -31,6 +31,7 @@ Appointment.init(
         paid: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: false,
         },
         paiment_due: {
             type: DataTypes.NUMBER,
@@ -39,7 +40,6 @@ Appointment.init(
         paiment_value: {
             type: DataTypes.NUMBER,
             allowNull: true,
-            defaultValue: 0,
         },
         client_id: {
             type: DataTypes.INTEGER,
