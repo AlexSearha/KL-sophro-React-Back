@@ -1,6 +1,6 @@
 BEGIN;
 
-DROP TABLE IF EXISTS "roles", "clients", "doctors","protocols_has_appointments", "appointments";
+DROP TABLE IF EXISTS "roles", "clients", "doctors","protocols", "protocols_has_appointments", "appointments";
 
 CREATE DOMAIN "rfc_email" AS TEXT
 CHECK (value ~ '^(?:[a-z0-9!#$%&''*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&''*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$');
@@ -32,7 +32,7 @@ CREATE TABLE "clients" (
     "newsletter" BOOLEAN,
     "notification" BOOLEAN,
     "confirmed" BOOLEAN,
-    "role_id" INTEGER REFERENCES roles("id"),
+    "role_id" INTEGER REFERENCES "roles"("id"),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ
 );
@@ -49,7 +49,17 @@ CREATE TABLE "doctors" (
     "phone_number" phone NOT NULL,
     "notification" BOOLEAN,
     "confirmed" BOOLEAN,
-    "role_id" INTEGER REFERENCES roles("id"),
+    "role_id" INTEGER REFERENCES "roles"("id"),
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    "updated_at" TIMESTAMPTZ
+);
+
+CREATE TABLE "protocols" (
+    "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+    "client_id" INTEGER REFERENCES "clients"("id"),
+    "doctor_id" INTEGER REFERENCES "doctors"("id"),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ
 );
@@ -70,8 +80,8 @@ CREATE TABLE "appointments" (
 
 CREATE TABLE "protocols_has_appointments" (
     "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "protocole_id" INTEGER REFERENCES protocols("id"),
-    "appointment_id" INTEGER REFERENCES appointments("id"),
+    "protocole_id" INTEGER REFERENCES "protocols"("id"),
+    "appointment_id" INTEGER REFERENCES "appointments"("id"),
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ,
     UNIQUE ("appointment_id", "protocole_id")
