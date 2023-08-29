@@ -25,10 +25,6 @@ Client.init(
             type: DataTypes.STRING,
             allowNull: true,
         },
-        student: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-        },
         address: {
             type: DataTypes.STRING,
             allowNull: true,
@@ -41,21 +37,29 @@ Client.init(
             type: DataTypes.STRING,
             allowNull: true,
         },
+        student: {
+            type: DataTypes.BOOLEAN,
+            allowNull:false,
+            defaultValue: false
+        },
         newsletter: {
             type: DataTypes.BOOLEAN,
             allowNull: true,
+            defaultValue: false
         },
         notification: {
             type: DataTypes.BOOLEAN, 
             allowNull: true,
+            defaultValue: false
         },
         confirmed: {
             type: DataTypes.BOOLEAN, 
             allowNull: false,
-            defaultValue: false,
+            defaultValue: false
         },
         role_id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             defaultValue: 1,
         }
     }, 

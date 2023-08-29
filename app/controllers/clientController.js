@@ -1,7 +1,7 @@
 const { hashMyPassword } = require("../functions/bcrypt");
 const { generateEmailConfirmationToken } = require("../functions/jwt");
 const { emailConfirmSubscribeToken } = require("../functions/nodemailer");
-const { Client } = require('../models')
+const { Client, Appointment } = require('../models')
 
 const clientController = {
     
@@ -9,13 +9,17 @@ const clientController = {
         try {
 
             const result = await Client.findAll({
+                order: [ ['lastname', 'ASC'] ],
                 include: 'appointments'
             });
+            if(!result){
+                return res.status(404).json({error: 'user not found'})
+            }
             res.status(200).json(result);
 
         } catch (error) {
             
-            console.error("Une erreur s'est produite :", error);
+            console.error("An error occurred :", error);
             res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données." });
         
         }
@@ -26,8 +30,15 @@ const clientController = {
 
         try {
             const result = await Client.findByPk(id, {
-                include: ['appointments', 'role']
+                include: [{
+                    model: Appointment,
+                    as: 'appointments',
+                }]
+
             })
+            if(!result){
+                return res.status(404).json({error: 'user not found'})
+            }
             res.status(200).json(result)
         } catch (error) {
             console.error("Une erreur s'est produite :", error);
@@ -39,6 +50,8 @@ const clientController = {
         const body = req.body;
         const { email, password } = req.body;
         const passwordHash = hashMyPassword(password);
+        console.log('email: ', email);
+        console.log('passwordHash: ', passwordHash);
         
         try {
 
@@ -47,11 +60,11 @@ const clientController = {
             await newClient.save();
             const tokenConfirmToSend = generateEmailConfirmationToken(body)
             await emailConfirmSubscribeToken(email, tokenConfirmToSend);
-            res.status(200).json({ message: "Client créé avec succès"})   
+            res.status(200).json({ message: "client successfully added, waiting for confirmation token"})   
             
         } catch (error) {
 
-            console.error("Une erreur s'est produite :", error);
+            console.error("An error occurred :", error);
             res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données." });
         
         }
@@ -60,38 +73,41 @@ const clientController = {
     updateOneClient: async (req, res) => {
         const { id } = req.params;
         const updateBody = req.body;
-        console.log(updateBody.email);
+        // console.log(updateBody.email);
 
         try {
 
             const result = await Client.findByPk(id);
 
-            if(result === null){
-                return res.status(404).json({error: 'client non trouvé'});
+            if(!result){
+                return res.status(404).json({error: 'client not found'});
             } 
             
             if(updateBody.email && result.dataValues.email !== updateBody.email){
-                res.status(401).json({error: 'Mise à jour email interdite'});
+                res.status(401).json({error: 'forbidden update'});
 
             } else {
                 await result.update(updateBody);
                 await result.save();
-                res.status(200).json({message: 'Modifications éffectuées'});
+                res.status(200).json({message: 'updated successfully'});
 
             }
 
         } catch (error) {
 
-            console.error("Une erreur s'est produite :", error);
+            console.error("An error occurred : ", error);
             res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données.." });
         }
     },
 
     deleteOneClient: async (req, res) => {
         const { id } = req.params;
-        const { role } = req.user;
 
         try {
+            if(!req.user){
+                return res.status(401).json({error: "user must be connected"})
+            }
+            const { role } = req.user;
 
             const client = await Client.findByPk(id);
 
@@ -112,7 +128,7 @@ const clientController = {
 
         } catch (error) {
 
-            console.error("Une erreur s'est produite :", error);
+            console.error("an error occurred :", error);
             res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données." });
         
         }

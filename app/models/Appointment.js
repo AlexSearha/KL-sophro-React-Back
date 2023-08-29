@@ -16,22 +16,22 @@ Appointment.init(
         online: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-            defaultValue: false,
+            defaultValue: false
         },
         reporting: {
             type: DataTypes.STRING,
             allowNull: true,
-            defaultValue: null,
+            defaultValue: null
         },
         exercices: {
             type: DataTypes.STRING,
             allowNull: true,
-            defaultValue: null,
+            defaultValue: null
         },
         paid: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-            defaultValue: false,
+            defaultValue: false
         },
         paiment_due: {
             type: DataTypes.NUMBER,
@@ -44,11 +44,12 @@ Appointment.init(
         client_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            defaultValue: 1
         },
         doctor_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            defaultValue: 1,
+            defaultValue: 1
         },
         protocol_id: {
             type: DataTypes.INTEGER,

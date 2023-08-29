@@ -40,6 +40,7 @@ Doctor.init(
         notification: {
             type: DataTypes.BOOLEAN,
             allowNull: true,
+            defaultValue: false
         },
         confirmed: {
             type: DataTypes.BOOLEAN, 

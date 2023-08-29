@@ -48,13 +48,14 @@ router.delete('/protocol/:protocolId/appointment/:appointmentId', appointmentCon
 
 
 // PROTOCOL
-router.get('/protocol',protocolController.getAllProtocols);
+router.route('/protocol')
+  .get(auth.isAdmin, protocolController.getAllProtocols)
+  .post(auth.isAdmin, protocolController.addNewProtocol);
 
 router.route('/protocol/:id(\\d+)')
-.get(protocolController.getOneProtocol)
-.post(protocolController.addNewProtocol)
-.patch(protocolController.updateOneProtocol)
-.delete(protocolController.deleteOneProtocol);
+  .get(auth.isAdmin, protocolController.getOneProtocol)
+  .patch(auth.isAdmin, protocolController.updateOneProtocol)
+  .delete(auth.isAdmin, protocolController.deleteOneProtocol);
 
 
 // LOGIN

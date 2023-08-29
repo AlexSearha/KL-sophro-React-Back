@@ -1,10 +1,21 @@
-const { Protocol } = require("../models");
+const { Protocol, Client, Appointment } = require("../models");
 
 const protocolController = {
     getAllProtocols: async ( _, res) => {
         try {
             const result = await Protocol.findAll({
-                include: 'appointments'
+                include: [{
+                    model: Appointment,
+                    as: 'appointments',
+                    attributes: { exclude: ['client_id', 'doctor_id','protocol_id']},
+                    include: [
+                        {
+                            model: Client,
+                            as: 'client',
+                            attributes: [ 'id','firstname','lastname', 'email', 'phone_number']
+                        }
+                    ]
+                }]
             });
             res.status(200).json(result);
         } catch (error) {
@@ -19,7 +30,17 @@ const protocolController = {
         
         try {
             const result = await Protocol.findByPk(id, {
-                include: 'appointments'
+                include: [{
+
+                    model: Appointment,
+                    as: 'appointments',
+                    attributes: { exclude: ['client_id', 'doctor_id','protocol_id']},
+                    include: [{
+                            model: Client,
+                            as: 'client',
+                            attributes: [ 'id','firstname','lastname', 'email', 'phone_number']
+                        }]
+                }]
             });
 
             if(!result){
@@ -56,14 +77,25 @@ const protocolController = {
         const updateBody = req.body;
         
         try {
-            const findProtocol = await Protocol.findByPk(id);
+            const findProtocol = await Protocol.findByPk(id, {
+                include: [{
+                    model: Appointment,
+                    as: 'appointments',
+                    attributes: { exclude: [ 'client_id', 'doctor_id', 'protocol_id']},
+                    include: [{
+                        model: Client,
+                        as: 'client',
+                        attributes: [ 'id','firstname','lastname', 'email', 'phone_number']
+                    }]
+                }]
+            });
             if(!findProtocol){
-                return res.status(404).json({error : 'user not found'})
+                return res.status(404).json({error : 'user not found'});
             }
             await findProtocol.update(updateBody);
             await findProtocol.save();
             
-            res.status(200).json({ message : "protocol successfully updated" });
+            res.status(200).json(findProtocol);
         } catch (error) {
             
             console.error( "Error :", error );
@@ -75,10 +107,12 @@ const protocolController = {
         const { id } = req.params;
         
         try {
-            await Protocol.destroy({
+            const result = await Protocol.destroy({
                 where: { id: id }
             });
-            
+            if(result === 0){
+                return res.status(404).json({error: 'protocol not found'})
+            }
             res.status(200).json({ message : 'protocol successfully deleted' });
         } catch (error) {
             

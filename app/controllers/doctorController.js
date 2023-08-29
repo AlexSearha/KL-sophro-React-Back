@@ -12,12 +12,12 @@ const doctorController = {
             const newClient = await Doctor.create(body);
             newClient.password = passwordHash;
             await newClient.save();
-            res.status(200).json({ message: "Praticien créé avec succès"})   
+            res.status(200).json({ message: "doctor successfully added"})   
             
         } catch (error) {
 
-            console.error("Une erreur s'est produite :", error);
-            res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données." });
+            console.error("an error occurred :", error);
+            res.status(500).json({ error: "an error occurred" });
         
         }
     },
@@ -38,8 +38,8 @@ const doctorController = {
 
         } catch (error) {
 
-            console.error("Une erreur s'est produite :", error);
-            res.status(500).json({ error: "Une erreur s'est produite lors de la recherche du praticien." });
+            console.error("an error occurred :", error);
+            res.status(500).json({ error: "an error occurred" });
         }
     },
 
@@ -60,8 +60,8 @@ const doctorController = {
 
         } catch (error) {
 
-            console.error("Une erreur s'est produite :", error);
-            res.status(500).json({ error: "Une erreur s'est produite lors de la mise à jour du client." });
+            console.error("an error occurred :", error);
+            res.status(500).json({ error: "an error occurred" });
         }
     },
 
@@ -73,15 +73,15 @@ const doctorController = {
                 where: { id: id }
             });
             if (clientId === 1){
-                res.status(200).json({ message : 'le praticien a bien été effacé'});
+                res.status(200).json({ message : 'doctor has been deleted'});
             } else {
-                res.status(404).json({ error: 'client non trouvé.'})
+                res.status(404).json({ error: 'doctor not found'})
             }
 
         } catch (error) {
 
-            console.error("Une erreur s'est produite :", error);
-            res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données." });
+            console.error("An error occured :", error);
+            res.status(500).json({ error: "an error occurred" });
         
         }
     },
