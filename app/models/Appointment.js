@@ -34,11 +34,11 @@ Appointment.init(
             defaultValue: false
         },
         paiment_due: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.DECIMAL,
             allowNull: false,
         },
         paiment_value: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.DECIMAL,
             allowNull: true,
         },
         client_id: {

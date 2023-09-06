@@ -1,5 +1,5 @@
 const { checkMyPassword, hashMyPassword } = require('../functions/bcrypt');
-const { generateLoginToken, confirmToken } = require('../functions/jwt');
+const { generateLoginTokens, confirmEmailToken, confirmAccessToken, confirmRefreshToken } = require('../functions/jwt');
 const { emailReinitPassword } = require('../functions/nodemailer');
 const { Client, Doctor, Role } = require('../models');
 
@@ -7,10 +7,6 @@ const authController = {
   
   login: async (req, res) => {
     const { email, password } = req.body;
-
-    if(req.headers['authorization'] !== undefined) {
-      return res.status(200).json({ message: 'user already authentified' });
-    }
 
     if(!email || !password){
       return res.status(404).json({error: 'email or password missing'})
@@ -43,9 +39,9 @@ const authController = {
         return res.status(401).json({ error: 'wrong password' });
       }
 
-      const userTokens = generateLoginToken(user.dataValues);
+      const userTokens = generateLoginTokens(user.dataValues);
       res.cookie('refresh_token', userTokens.refreshToken, { httpOnly: true });
-      res.status(200).json(userTokens);
+      res.status(200).json(userTokens.accessToken);
 
     } catch (error) {
       
@@ -55,10 +51,10 @@ const authController = {
     }
   },
 
-  loggout: async ( _, res) => {
+  logout: async ( _, res) => {
       try {
         res.clearCookie('refresh_token');
-        res.status(200).json({message: 'loggout successfull'})
+        res.status(200).json({message: 'logout successfull'})
     } catch (error) {
         console.error("Une erreur s'est produite :", error);
         res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données." });
@@ -85,7 +81,7 @@ const authController = {
     const { token } = req.params;
     
     try {
-      const tokenValidity = await confirmToken(token)
+      const tokenValidity = await confirmEmailToken(token)
       const { email } = tokenValidity;
       const userClient = await Client.findOne({ where: { email: email }});
       const userDoctor = await Doctor.findOne({ where: { email: email }});
@@ -115,7 +111,7 @@ const authController = {
     const { password } = req.body;
 
     try {
-      const tokenValidity = await confirmToken(token)
+      const tokenValidity = await confirmEmailToken(token)
       const { email } = tokenValidity;
       const userClient = await Client.findOne({ where: { email: email }});
       const userDoctor = await Doctor.findOne({ where: { email: email }});
@@ -138,6 +134,46 @@ const authController = {
 
       console.error('Erreur de vérification du token :', error);
       res.status(400).json({ error: 'expired token' }); 
+    }
+  },
+
+  regenerateAccessToken: async (req, res, next) => {
+    const { accessToken } = req.body;
+    console.log(accessToken);
+    const extractToken = accessToken.split('Bearer ')[1];
+    console.log('extractToken: ', extractToken);
+
+    try {
+
+      const checkToken = await confirmAccessToken(extractToken);
+      if(checkToken){
+        return res.status(200).json({message : 'accessToken valid'})
+      }
+
+    } catch (error) {
+
+      console.log('ERROR: ',error);
+      if(error === 'JWT expired' || error === 'JWT malformed'){
+
+        try {
+          const refreshToken = req.cookies.refresh_token;
+          const checkRefresh = await confirmRefreshToken(refreshToken);
+          console.log('refreshToken: ', refreshToken);
+          console.log('checkRefresh: ', checkRefresh);
+          if(checkRefresh){
+            const newTokens = generateLoginTokens(checkRefresh);
+            console.log('newTokens: ', newTokens);
+            res.setHeader('accessToken', `Bearer ${newTokens.accessToken}`);
+            res.cookie('refresh_token', newTokens.refreshToken)
+            res.status(200).json({message : 'tokens regenerated'})
+          }
+        } catch (error) {
+          if(error === 'JWT expired' || error === 'JWT malformed'){
+            return res.status(401).json({error: 'refresh token expired'})
+          }
+        }
+
+      }
     }
   }
 };

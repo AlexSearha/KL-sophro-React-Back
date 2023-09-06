@@ -1,5 +1,6 @@
 const sanitize = require('sanitize-html');
 
+
 /// On exporte un middleware qui servira de filtre pour nettoyer les données reçues.
 module.exports = (req, _, next) => {
   if(req.body){

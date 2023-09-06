@@ -7,7 +7,7 @@ const clientController = {
     
     getAllClients: async ( _, res) => {
         try {
-
+        
             const result = await Client.findAll({
                 order: [ ['lastname', 'ASC'] ],
                 include: 'appointments'
@@ -50,17 +50,20 @@ const clientController = {
         const body = req.body;
         const { email, password } = req.body;
         const passwordHash = hashMyPassword(password);
-        console.log('email: ', email);
-        console.log('passwordHash: ', passwordHash);
+        // console.log('email: ', email);
+        // console.log('passwordHash: ', passwordHash);
         
         try {
-
+            const searchClient = await Client.findOne({where: { email: email }})
+            if(searchClient){
+                return res.status(403).json({error: 'user already exist'});
+            }
             const newClient = await Client.create(body);
             newClient.password = passwordHash;
             await newClient.save();
             const tokenConfirmToSend = generateEmailConfirmationToken(body)
             await emailConfirmSubscribeToken(email, tokenConfirmToSend);
-            res.status(200).json({ message: "client successfully added, waiting for confirmation token"})   
+            res.status(201).json({ message: "user added, confirmation token needed"})   
             
         } catch (error) {
 

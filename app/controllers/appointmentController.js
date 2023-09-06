@@ -38,7 +38,7 @@ const appointmentController = {
     },
     
     addNewAppointment: async (req, res) => {
-        const id  = parseInt(req.params.id);
+        const id  = parseInt(req.params.clientId);
         const body = req.body;
         try {
 
