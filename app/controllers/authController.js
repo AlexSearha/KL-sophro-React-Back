@@ -9,7 +9,7 @@ const authController = {
     const { email, password } = req.body;
 
     if(!email || !password){
-      return res.status(404).json({error: 'email or password missing'})
+      return res.status(404).json({ error: 'email or password missing' })
     }
 
     try {
@@ -45,7 +45,7 @@ const authController = {
 
     } catch (error) {
       
-      console.error("error :", error);
+      console.error("an error occurred :", error);
       res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données." });
     
     }
@@ -56,7 +56,7 @@ const authController = {
         res.clearCookie('refresh_token');
         res.status(200).json({message: 'logout successfull'})
     } catch (error) {
-        console.error("Une erreur s'est produite :", error);
+        console.error("an error occurred :", error);
         res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données." });
     }
   },
@@ -71,7 +71,7 @@ const authController = {
 
     } catch (error) {
 
-      console.error('Erreur de vérification du token :', error);
+      console.error('an error occurred :', error);
       res.status(400).json({ error: 'error' });  
 
     }
@@ -100,8 +100,8 @@ const authController = {
       
     } catch (error) {
       
-      console.error('Erreur de vérification du token :', error);
-      res.status(400).json({ error: 'expired token' });  
+      console.error('an error occurred :', error);
+      res.status(401).json({ error: 'expired token' });  
 
     }
   },
@@ -132,15 +132,15 @@ const authController = {
 
     } catch (error) {
 
-      console.error('Erreur de vérification du token :', error);
+      console.error('an error occurred :', error);
       res.status(400).json({ error: 'expired token' }); 
     }
   },
 
-  regenerateAccessToken: async (req, res, next) => {
+  regenerateAccessToken: async (req, res) => {
     const { accessToken } = req.body;
     console.log(accessToken);
-    const extractToken = accessToken.split('Bearer ')[1];
+    const extractToken = accessToken?.split('Bearer ')[1];
     console.log('extractToken: ', extractToken);
 
     try {
@@ -156,20 +156,18 @@ const authController = {
       if(error === 'JWT expired' || error === 'JWT malformed'){
 
         try {
+
           const refreshToken = req.cookies.refresh_token;
           const checkRefresh = await confirmRefreshToken(refreshToken);
-          console.log('refreshToken: ', refreshToken);
-          console.log('checkRefresh: ', checkRefresh);
           if(checkRefresh){
             const newTokens = generateLoginTokens(checkRefresh);
-            console.log('newTokens: ', newTokens);
             res.setHeader('accessToken', `Bearer ${newTokens.accessToken}`);
             res.cookie('refresh_token', newTokens.refreshToken)
             res.status(200).json({message : 'tokens regenerated'})
           }
         } catch (error) {
           if(error === 'JWT expired' || error === 'JWT malformed'){
-            return res.status(401).json({error: 'refresh token expired'})
+            return res.status(401).json({message: 'refresh token expired'})
           }
         }
 
