@@ -40,8 +40,17 @@ const authController = {
       }
 
       const userTokens = generateLoginTokens(user.dataValues);
+      const responseJSON = {
+        accessToken: userTokens.accessToken,
+        user: {
+          id: user.id,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          email: user.email
+        }
+      }
       res.cookie('refresh_token', userTokens.refreshToken, { httpOnly: true });
-      res.status(200).json(userTokens.accessToken);
+      res.status(200).json(responseJSON);
 
     } catch (error) {
       

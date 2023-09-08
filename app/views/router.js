@@ -68,7 +68,7 @@ router.get('/logout', authController.logout);
 // CONFIRMATION SUBSCRIPTION
 router.get('/confirm/:token', auth.confirmSubscription); 
 
-// REGENERATION ACCESSTOKEN
+// AUTO-REGENERATE ACCESSTOKEN
 router.post('/regen-token',authController.regenerateAccessToken)
 
 // RESET PASSWORD

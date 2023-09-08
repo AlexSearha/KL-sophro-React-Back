@@ -12,13 +12,13 @@ function generateLoginTokens(data) {
         id: id,
         email: email,
         role: role_id
-      }, ACCESSSECRETPHRASE , { expiresIn: 60 });
+      }, ACCESSSECRETPHRASE , { expiresIn: 60*60 });
       
       const refreshToken = jwt.sign({
         id: id,
         email: email,
         role: role_id
-      }, REFRESHSECRETPHRASE , { expiresIn: 60*2 });
+      }, REFRESHSECRETPHRASE , { expiresIn: '2d' });
 
       return { accessToken, refreshToken }
 }
@@ -29,7 +29,7 @@ function generateEmailConfirmationToken(data){
   return jwt.sign({
     id: id,
     email: email,
-  }, EMAILCONFIRMATIONPHRASE , { expiresIn: 20 * 60 });
+  }, EMAILCONFIRMATIONPHRASE , { expiresIn: 25 * 60 });
 }
 
 async function confirmEmailToken(tokenToCheck){
