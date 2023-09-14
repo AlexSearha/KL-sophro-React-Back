@@ -1,5 +1,5 @@
 const { hashMyPassword } = require("../functions/bcrypt");
-const { Doctor, Role } = require("../models");
+const { Doctor, Role, Unavailability } = require("../models");
 
 const doctorController = {
     
@@ -28,7 +28,7 @@ const doctorController = {
         try {
 
             const result = await Doctor.findByPk(id, {
-                include: [{model: Role}]
+                include: [{ model: Role}, {model: Unavailability, as: 'unavailabilities'}],
             })
             if(result !== null){
                 res.status(200).json(result)

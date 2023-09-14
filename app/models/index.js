@@ -3,6 +3,7 @@ const Client = require("./Client");
 const Doctor = require("./Doctor");
 const Protocol = require("./Protocols");
 const Role = require("./Role");
+const Unavailability = require("./Unavailability");
 
 // Relation CLIENT - APPOINTMENT
 Client.hasMany(Appointment, {
@@ -44,6 +45,16 @@ Appointment.belongsTo(Protocol, {
     as: 'protocols'
 });
 
+// Relation DOCTOR - Unavailability
+Doctor.hasMany(Unavailability, {
+    foreignKey: 'doctor_id',
+    as: 'unavailabilities'
+});
+Unavailability.belongsTo(Doctor, {
+    foreignKey: 'doctor_id',
+    as:'doctor'
+})
+
 // Relation ROLE - CLIENT
 Role.hasMany(Client, {
     foreignKey: 'role_id',
@@ -62,4 +73,4 @@ Role.hasOne(Doctor, {
 Doctor.belongsTo(Role);
 
 
-module.exports = { Client, Appointment, Doctor, Role, Protocol };
+module.exports = { Client, Appointment, Doctor, Role, Protocol, Unavailability };

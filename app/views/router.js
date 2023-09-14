@@ -5,14 +5,15 @@ const doctorController = require('../controllers/doctorController');
 const appointmentController = require('../controllers/appointmentController');
 const authController = require('../controllers/authController');
 const protocolController = require('../controllers/protocolController');
+const unavailability = require('../controllers/unavailabilityController');
 const sanitize = require('../middleware/sanitize');
 
 const router = Router();
 
 // SANITIZE ALL ROUTES
-router.route('*')
-  .post(sanitize)
-  .patch(sanitize);
+// router.route('*')
+//   .post(sanitize)
+//   .patch(sanitize);
 
 // CLIENT
 router.route('/client')
@@ -21,27 +22,36 @@ router.route('/client')
   .post(clientController.addNewClient);
 
 router.route('/client/:id(\\d+)')
-  .get(auth.authTokensValidity, clientController.getOneClient)
-  .patch(auth.authTokensValidity, clientController.updateOneClient)
-  .delete(auth.authTokensValidity ,clientController.deleteOneClient);
+  .get(clientController.getOneClient)
+  .patch(clientController.updateOneClient)
+  .delete(clientController.deleteOneClient);
   
   // DOCTOR
-router.post('/doctor',auth.authTokensValidity,auth.isAdmin, doctorController.addDoctor);
+router.post('/doctor', doctorController.addDoctor);
 
 router.route('/doctor/:id(\\d+)')
-  .get(auth.authTokensValidity, doctorController.getOneDoctor)
-  .patch(auth.authTokensValidity,auth.isAdmin, doctorController.updateDoctor)
-  .delete(auth.authTokensValidity,auth.isAdmin, doctorController.deleteDoctor);
+  .get(doctorController.getOneDoctor)
+  .patch(doctorController.updateDoctor)
+  .delete(doctorController.deleteDoctor);
+
+  // UNAVAILABILITY
+router.route('/unavailability')
+  .get(unavailability.getAllAvailabilities)
+  .post(unavailability.addNewUnavailabilities);
+router.route('/unavailability/:id(\\d+)')
+  .get(unavailability.getOneUnavailability)
+  .delete(unavailability.deleteUnavailabilities);
   
   // APPOINTMENT
 router.get('/appointment',auth.authTokensValidity, appointmentController.getAllAppointments);
 
 router.route('/appointment/:id(\\d+)')
-  .get(auth.authTokensValidity, appointmentController.getOneAppointment)
-  .patch(auth.authTokensValidity, appointmentController.updateOneAppointment)
-  .delete(auth.authTokensValidity ,appointmentController.deleteOneAppointment);
+  .get( appointmentController.getOneAppointment)
+  .patch(appointmentController.updateOneAppointment)
+  .delete(appointmentController.deleteOneAppointment);
 
-router.post('/client/:clientId(\\d+)/appointment', auth.authTokensValidity, appointmentController.addNewAppointment);
+// router.post('/client/:clientId(\\d+)/appointment', auth.authTokensValidity, appointmentController.addNewAppointment);
+router.post('/client/:clientId(\\d+)/appointment', appointmentController.addNewAppointment);
 // Add an appointment to a protocol
 router.post('/protocol/:protocolId/appointment', appointmentController.addToProtocol);
 // Delete an appointment to a protocol
