@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { Client, Doctor } = require('../models');
-const { generateNewAccessToken, confirmRefreshToken, confirmAccessToken  } = require('../functions/jwt');
+const { confirmEmailToken, confirmRefreshToken, confirmAccessToken  } = require('../functions/jwt');
 
 const auth = {
 
@@ -50,7 +50,7 @@ const auth = {
     confirmSubscription: async (req, res, next) => {
         const token = req.params.token;
         try {
-            const tokenUncrypt = await confirmToken(token);
+            const tokenUncrypt = await confirmEmailToken(token);
             const { email } = tokenUncrypt;
             const userClient = await Client.findOne({ where : { email: email }});
             const userDoctor = await Doctor.findOne({ where : { email: email }});

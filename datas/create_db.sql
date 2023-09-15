@@ -28,7 +28,7 @@ CREATE TABLE "clients" (
     "student" BOOLEAN,
     "address" TEXT,
     "photo" TEXT,
-    "phone_number" phone TEXT,
+    "phone_number" phone,
     "newsletter" BOOLEAN,
     "notification" BOOLEAN,
     "confirmed" BOOLEAN NOT NULL,
@@ -112,5 +112,7 @@ VALUES ('2023-08-30 08:00:00.828+02', 'reservé', false, false, 50, 50, 1, 1, 1)
 ('2023-09-22 16:00:00.828+02', 'reservé', false, false, 50, 50, 1, 1, 2), 
 ('2023-09-25 18:00:00.828+02', 'reservé', false, false, 40, 40, 1, 1, 2); 
 
+INSERT INTO "unavailabilities" ("days_of_week_from", "days_of_week_to", "doctor_id")
+VALUES (0, 3, 1);
 
 COMMIT;

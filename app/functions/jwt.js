@@ -29,7 +29,7 @@ function generateEmailConfirmationToken(data){
   return jwt.sign({
     id: id,
     email: email,
-  }, EMAILCONFIRMATIONPHRASE , { expiresIn: 25 * 60 });
+  }, EMAILCONFIRMATIONPHRASE , { expiresIn: 25*60 });
 }
 
 async function confirmEmailToken(tokenToCheck){
