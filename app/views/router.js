@@ -47,8 +47,8 @@ router.get('/appointment',auth.authTokensValidity, appointmentController.getAllA
 
 router.route('/appointment/:id(\\d+)')
   .get( appointmentController.getOneAppointment)
-  .patch(appointmentController.updateOneAppointment)
-  .delete(appointmentController.deleteOneAppointment);
+  // .patch(appointmentController.updateOneAppointment)
+  .patch(appointmentController.deleteOneAppointment);
 
 // router.post('/client/:clientId(\\d+)/appointment', auth.authTokensValidity, appointmentController.addNewAppointment);
 router.post('/client/:clientId(\\d+)/appointment', appointmentController.addNewAppointment);

@@ -81,8 +81,8 @@ CREATE TABLE "appointments" (
     "reporting" TEXT,
     "exercices" TEXT,
     "paid" BOOLEAN NOT NULL,
-    "paiment_due" DECIMAL NOT NULL,
-    "paiment_value" DECIMAL,
+    "payment_due" DECIMAL NOT NULL,
+    "payment_value" DECIMAL,
     "client_id" INTEGER REFERENCES "clients"("id"),
     "doctor_id" INTEGER REFERENCES "doctors"("id"),
     "protocol_id" INTEGER REFERENCES "protocols"("id"),
@@ -105,7 +105,7 @@ INSERT INTO "protocols" ("name", "description", "doctor_id")
 VALUES ('cigarette', 'le client est venu me voir pour travailler pour arreter de fumer',1),
 ('sommeil', 'le client à des problemes de sommeil',1);
 
-INSERT INTO "appointments" ("date","status", "online", "paid", "paiment_due", "paiment_value", "client_id", "doctor_id", "protocol_id")
+INSERT INTO "appointments" ("date","status", "online", "paid", "payment_due", "payment_value", "client_id", "doctor_id", "protocol_id")
 VALUES ('2023-08-30 08:00:00.828+02', 'reservé', false, false, 50, 50, 1, 1, 1), 
 ('2023-09-20 16:00:00.828+02', 'reservé', false, false, 50, 50, 1, 1 ,1), 
 ('2023-09-21 16:00:00.828+02', 'reservé', false, false, 40, 40, 1, 1, 2), 

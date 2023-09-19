@@ -6,12 +6,13 @@ class Appointment extends Model {}
 Appointment.init(
     {
         date: {
-            type: DataTypes.TIME,
+            type: DataTypes.DATE,
             allowNull: false,
         },
         status: {
             type: DataTypes.STRING,
             allowNull: false,
+            defaultValue: 'booked'
         },
         online: {
             type: DataTypes.BOOLEAN,
@@ -33,18 +34,17 @@ Appointment.init(
             allowNull: false,
             defaultValue: false
         },
-        paiment_due: {
+        payment_due: {
             type: DataTypes.DECIMAL,
             allowNull: false,
         },
-        paiment_value: {
+        payment_value: {
             type: DataTypes.DECIMAL,
             allowNull: true,
         },
         client_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            defaultValue: 1
         },
         doctor_id: {
             type: DataTypes.INTEGER,

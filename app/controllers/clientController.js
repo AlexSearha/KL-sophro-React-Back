@@ -33,7 +33,9 @@ const clientController = {
                 include: [{
                     model: Appointment,
                     as: 'appointments',
-                }]
+                }],
+                order: [[ {model: Appointment, as: 'appointments'}, 'date', 'ASC' ]]
+                
 
             })
             if(!result){

@@ -1,3 +1,4 @@
+const { emailCancelAppointmentClient, emailCancelAppointmentDoctor } = require("../functions/nodemailer");
 const { Appointment, Protocol, Client } = require("../models");
 
 const appointmentController = {
@@ -41,15 +42,21 @@ const appointmentController = {
         const id  = parseInt(req.params.clientId);
         const body = req.body;
         try {
-
+            console.log('body: ',body);
             const client = await Client.findByPk(id)
             if(!client){
                 return res.status(404).json({error: "client not found"})
             }
-            const newAppointment = await Appointment.create(body);
-            newAppointment.client_id = id;
-            await newAppointment.save();
-            res.status(200).json({message : 'new appointment added'});
+            const jsonToSend = {
+                date: body.date,
+                payment_value: body.studentPayment,
+                payment_due: body.studentPayment,
+                client_id: body.id,
+            }
+            console.log('jsonToSend: ',jsonToSend);
+            const newAppointment = await Appointment.create(jsonToSend);
+
+            res.status(200).json(newAppointment);
 
         } catch (error) {
 
@@ -69,7 +76,7 @@ const appointmentController = {
             if(result[0] === 0){
                 res.status(404).json({ error: 'error during updates'});
             } else {
-                res.status(200).json({ message: 'appointment updated successfully'});
+                res.status(200).json(result);
             }
         } catch (error) {
                         
@@ -82,13 +89,29 @@ const appointmentController = {
 
     deleteOneAppointment : async (req, res) => {
         const { id } = req.params;
+        const { email, firstname, lastname } = req.body.user;
+        const { year, month, day, hour} = req.body.appointmentConcerned;
+        const responseJSON = { 
+            firstname: firstname,
+            lastname: lastname,
+            year: year,
+            month: month,
+            day: day, 
+            hour: hour
+        }
+        console.log('email: ',email, 'fistname', firstname, 'lastname', lastname);
         try {
 
             const result = await Appointment.destroy({
                 where: { id: id }
             });
             if(result === 1){
-                res.status(200).json({ message: 'appointment deleted successfully'});
+                const sendEmailClientResult = await emailCancelAppointmentClient(email, responseJSON);
+                const sendEmailDoctorResult = await emailCancelAppointmentDoctor('alexma225@hotmail.com', responseJSON);
+                if(sendEmailClientResult && sendEmailDoctorResult){
+                    res.status(200).json({ message: 'appointment deleted successfully'});
+                }
+                return res.status(404).json({error: 'something went wrong when canceled appointment email where sent'})
             } else {
                 res.status(404).json({error: `appointment not found`});
             }
