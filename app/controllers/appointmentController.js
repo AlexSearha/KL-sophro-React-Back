@@ -1,4 +1,4 @@
-const { emailCancelAppointmentClient, emailCancelAppointmentDoctor } = require("../functions/nodemailer");
+const { emailCancelAppointmentClient, emailCancelAppointmentDoctor, emailAddNewAppointmentDoctor, emailAddNewAppointmentClient } = require("../functions/nodemailer");
 const { Appointment, Protocol, Client } = require("../models");
 
 const appointmentController = {
@@ -40,21 +40,30 @@ const appointmentController = {
     
     addNewAppointment: async (req, res) => {
         const id  = parseInt(req.params.clientId);
-        const body = req.body;
+        const {email, firstname, lastname, appointmentHour, studentPayment, date } = req.body;
+        const [year, month, day] = req.body.appointmentDate.split('-');
+        const jsonToEmail = {
+            hour: appointmentHour,
+            year: parseInt(year,10),
+            month: parseInt(month, 10),
+            day: parseInt(day, 10),
+            firstname: firstname,
+            lastname: lastname,
+        }
+        const jsonToSend = {
+            date: date,
+            payment_value: studentPayment,
+            payment_due: studentPayment,
+            client_id: id,
+        }
         try {
-            console.log('body: ',body);
             const client = await Client.findByPk(id)
             if(!client){
                 return res.status(404).json({error: "client not found"})
             }
-            const jsonToSend = {
-                date: body.date,
-                payment_value: body.studentPayment,
-                payment_due: body.studentPayment,
-                client_id: body.id,
-            }
-            console.log('jsonToSend: ',jsonToSend);
             const newAppointment = await Appointment.create(jsonToSend);
+            await emailAddNewAppointmentClient(email, jsonToEmail);
+            await emailAddNewAppointmentDoctor('alexis.marouf@hotmail.fr', jsonToEmail);
 
             res.status(200).json(newAppointment);
 
