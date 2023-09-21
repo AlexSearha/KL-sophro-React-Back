@@ -47,7 +47,13 @@ const authController = {
           firstname: user.firstname,
           lastname: user.lastname,
           email: user.email,
-          student: user.student
+          student: user.student,
+          address: user.address,
+          phone: user.phone_number,
+          photo: user.photo,
+          newsletter: user.newsletter,
+          notification: user.notification,
+          role: user.role_id,
         }
       }
       res.cookie('refresh_token', userTokens.refreshToken, { httpOnly: true });
