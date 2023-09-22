@@ -49,7 +49,7 @@ const authController = {
           email: user.email,
           student: user.student,
           address: user.address,
-          phone: user.phone_number,
+          phone_number: user.phone_number,
           photo: user.photo,
           newsletter: user.newsletter,
           notification: user.notification,
@@ -188,6 +188,38 @@ const authController = {
         }
 
       }
+    }
+  },
+
+  checkPassword: async (req, res) => {
+    const { oldPassword, newPassword , clientId } = req.body; 
+    try {
+
+      const getClient = await Client.findByPk(clientId);
+      if(!getClient){
+        
+        return res.status(401).json({error: 'use not found'})
+      }
+
+      const clientTruePassword = getClient.password
+      const checkTruePassword = checkMyPassword(oldPassword, clientTruePassword)
+
+      if(checkTruePassword){
+
+        const hashedPassword = hashMyPassword(newPassword)
+        getClient.password = hashedPassword;
+        await getClient.save(); 
+        res.status(200).json({message: 'password successfully updated'})
+
+      } else {
+
+        return res.status(401).json({error: `old password doesn't match`})
+      }
+
+    } catch (error) {
+
+      console.error('an error occurred :', error);
+      res.status(401).json({ error: 'expired token' });
     }
   }
 };

@@ -94,7 +94,7 @@ const clientController = {
             } else {
                 await result.update(updateBody);
                 await result.save();
-                res.status(200).json({message: 'updated successfully'});
+                res.status(200).json(result);
 
             }
 

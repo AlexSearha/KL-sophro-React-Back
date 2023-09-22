@@ -88,6 +88,8 @@ router.route('/reset-password/:token')
   .get(authController.checkTokenBeforeResetPassword)
   .post(authController.resetPassword);
 
+// CHECK PASSWORD
+router.post('/check-password', authController.checkPassword);
   
 // 404 PAGE
 router.get('*', ( _, res) => {
