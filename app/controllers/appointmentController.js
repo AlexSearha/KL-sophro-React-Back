@@ -63,7 +63,7 @@ const appointmentController = {
             }
             const newAppointment = await Appointment.create(jsonToSend);
             await emailAddNewAppointmentClient(email, jsonToEmail);
-            await emailAddNewAppointmentDoctor('alexis.marouf@hotmail.fr', jsonToEmail);
+            await emailAddNewAppointmentDoctor('alexma225@hotmail.com', jsonToEmail);
 
             res.status(200).json(newAppointment);
 
@@ -83,7 +83,7 @@ const appointmentController = {
                 where: { id: id }
             })
             if(result[0] === 0){
-                res.status(404).json({ error: 'error during updates'});
+                res.status(403).json({ error: 'error during updates'});
             } else {
                 res.status(200).json(result);
             }
@@ -99,16 +99,17 @@ const appointmentController = {
     deleteOneAppointment : async (req, res) => {
         const { id } = req.params;
         const { email, firstname, lastname } = req.body.user;
-        const { year, month, day, hour} = req.body.appointmentConcerned;
+        const { year, month, day, hour, minutes} = req.body.appointmentConcerned;
         const responseJSON = { 
             firstname: firstname,
             lastname: lastname,
             year: year,
             month: month,
             day: day, 
-            hour: hour
+            hour: hour, 
+            minutes: minutes
         }
-        console.log('email: ',email, 'fistname', firstname, 'lastname', lastname);
+        console.log('responseJSON: ',responseJSON);
         try {
 
             const result = await Appointment.destroy({
@@ -117,10 +118,10 @@ const appointmentController = {
             if(result === 1){
                 const sendEmailClientResult = await emailCancelAppointmentClient(email, responseJSON);
                 const sendEmailDoctorResult = await emailCancelAppointmentDoctor('alexma225@hotmail.com', responseJSON);
-                if(sendEmailClientResult && sendEmailDoctorResult){
-                    res.status(200).json({ message: 'appointment deleted successfully'});
-                }
-                return res.status(404).json({error: 'something went wrong when canceled appointment email where sent'})
+                console.log('sendEmailClientResult: ',sendEmailClientResult);
+                console.log('sendEmailDoctorResult: ',sendEmailDoctorResult);
+                res.status(200).json({ message: 'appointment deleted successfully'});
+                
             } else {
                 res.status(404).json({error: `appointment not found`});
             }

@@ -49,7 +49,7 @@ async function emailAddNewAppointmentClient(emailTo, appointmentInfos) {
     from: '"Katia Lemaire Sophrologue" <contact@mytechcompanion.fr>', // sender address
     to: emailTo, // list of receivers
     subject: `Votre rendez vous est confirmé`, // Subject line
-    html:     `<p>Bonjour ${firstname} ${lastname},</p>Votre rendez-vous du ${day}/${month}/${year} -- ${hour}h00 à bien été prise en compte.</p></br><p>Merci pour votre confiance</p></br>Katia Lemaire - Sophrologue</br>22 rue des tisserands</br>56190, NOYAL MUZILLAC</br>`, // html body
+    html:     `<p>Bonjour ${firstname} ${lastname},</p>Votre rendez-vous du ${day}/${month}/${year} -- ${hour} à bien été prise en compte.</p></br><p>Merci pour votre confiance</p></br>Katia Lemaire - Sophrologue</br>22 rue des tisserands</br>56190, NOYAL MUZILLAC</br>`, // html body
   });
   
   console.log("Message sent: %s", info.messageId);
@@ -61,34 +61,36 @@ async function emailAddNewAppointmentDoctor(emailTo, appointmentInfos) {
     from: '"Katia Lemaire Sophrologue" <contact@mytechcompanion.fr>', // sender address
     to: emailTo, // list of receivers
     subject: `Nouveau rendez-vous de réservé`, // Subject line
-    html:     `<p>Bonjour ,</p>Un nouveau rendez-vous vient d'être programmé: ${day}/${month}/${year} -- ${hour}h00 avec Mme/M ${firstname} ${lastname}</p>`, // html body
+    html:     `<p>Bonjour ,</p>Un nouveau rendez-vous vient d'être programmé: ${day}/${month}/${year} -- ${hour} avec Mme/M ${firstname} ${lastname}</p>`, // html body
   });
   
   console.log("Message sent: %s", info.messageId);
 }
 
 async function emailCancelAppointmentClient(emailTo, appointmentInfos) {
-  const {year, month, day, hour, firstname, lastname} = appointmentInfos;
+  const {year, month, day, hour, minutes, firstname, lastname} = appointmentInfos;
   const info = await transporter.sendMail({
     from: '"Katia Lemaire Sophrologue" <contact@mytechcompanion.fr>', // sender address
     to: emailTo, // list of receivers
     subject: `Annulation de votre rendez-vous`, // Subject line
-    html:     `<p>Bonjour ${firstname} ${lastname},</p>L'annulation de votre rendez-vous du ${day}/${month}/${year} -- ${hour}h00 à bien été prise en compte.</p></br>Katia Lemaire - Sophrologue</br>22 rue des tisserands</br>56190, NOYAL MUZILLAC</br>`, // html body
+    html:     `<p>Bonjour ${firstname} ${lastname},</p>L'annulation de votre rendez-vous du ${day}/${month}/${year} -- ${hour}h${minutes} à bien été prise en compte.</p></br>Katia Lemaire - Sophrologue</br>22 rue des tisserands</br>56190, NOYAL MUZILLAC</br>`, // html body
   });
   
   console.log("Message sent: %s", info.messageId);
+
 }
 
 async function emailCancelAppointmentDoctor(emailTo, appointmentInfos) {
-  const {year, month, day, hour, firstname, lastname} = appointmentInfos;
+  const {year, month, day, hour,minutes, firstname, lastname} = appointmentInfos;
   const info = await transporter.sendMail({
     from: '"Katia Lemaire Sophrologue" <contact@mytechcompanion.fr>', // sender address
     to: emailTo, // list of receivers
     subject: `[ANNULATION] Rendez-vous du ${day}/${month}/${year} -- ${hour}h00 annulé  `, // Subject line
-    html:     `<p>Bonjour,</p>L'annulation du rendez-vous ${day}/${month}/${year} -- ${hour}h00 à ${hour + 1}h00 de Mme/M ${firstname} ${lastname} à bien été prise en compte</p>`, // html body
+    html:     `<p>Bonjour,</p>L'annulation du rendez-vous ${day}/${month}/${year} -- ${hour}h${minutes} à ${hour + 1}h${minutes} de Mme/M ${firstname} ${lastname} à bien été prise en compte</p>`, // html body
   });
   
   console.log("Message sent: %s", info.messageId);
+
 }
 
 module.exports = { emailConfirmSubscribeToken, emailReinitPassword, emailCancelAppointmentClient, emailCancelAppointmentDoctor, emailAddNewAppointmentClient, emailAddNewAppointmentDoctor };
