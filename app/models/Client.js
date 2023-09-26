@@ -23,7 +23,7 @@ Client.init(
         },
         dateofbirth: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
         },
         address: {
             type: DataTypes.STRING,
@@ -35,7 +35,7 @@ Client.init(
         },
         phone_number: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
         },
         student: {
             type: DataTypes.BOOLEAN,

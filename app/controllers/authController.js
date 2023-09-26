@@ -1,5 +1,5 @@
 const { checkMyPassword, hashMyPassword } = require('../functions/bcrypt');
-const { generateLoginTokens, confirmEmailToken, confirmAccessToken, confirmRefreshToken } = require('../functions/jwt');
+const { generateLoginTokens,confirmEmailtoken, confirmAccessToken, confirmRefreshToken, generateResetPasswordToken } = require('../functions/jwt');
 const { emailReinitPassword } = require('../functions/nodemailer');
 const { Client, Doctor, Role } = require('../models');
 
@@ -40,6 +40,7 @@ const authController = {
       }
 
       const userTokens = generateLoginTokens(user.dataValues);
+      console.log('req.user: ',req.user);
       const responseJSON = {
         accessToken: userTokens.accessToken,
         user: {
@@ -78,11 +79,13 @@ const authController = {
   },
 
   sendTokenByEmail: async (req, res) => {
-    const { email } = req.body;
+    const body = req.body;
+    const { email } = req.body;
 
     try {
-
-      await emailReinitPassword(email);
+      const generateToken =  generateResetPasswordToken(body)
+      const encoreTokenURI = generateToken.split('.').join('-')
+      await emailReinitPassword(email, encoreTokenURI);
       res.status(200).json({ message : 'email sent successfully'});
 
     } catch (error) {
@@ -91,7 +94,7 @@ const authController = {
       res.status(400).json({ error: 'error' });  
 
     }
-  } ,
+  },
 
   checkTokenBeforeResetPassword: async (req, res) => {
     const { token } = req.params;
@@ -123,11 +126,11 @@ const authController = {
   },
 
   resetPassword: async (req, res) => {
-    const { token } = req.params;
-    const { password } = req.body;
+    const { token, password } = req.body;
+    const reformatToken = token.split('-').join('.');
 
     try {
-      const tokenValidity = await confirmEmailToken(token)
+      const tokenValidity = await confirmEmailtoken(reformatToken)
       const { email } = tokenValidity;
       const userClient = await Client.findOne({ where: { email: email }});
       const userDoctor = await Doctor.findOne({ where: { email: email }});

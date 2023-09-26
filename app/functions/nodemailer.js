@@ -37,7 +37,7 @@ async function emailReinitPassword(emailTo, token) {
     from: '"Katia Lemaire Sophrologue" <contact@mytechcompanion.fr>', // sender address
     to: emailTo, // list of receivers
     subject: "Reinitialisation de votre mot de passe", // Subject line
-    html:     `<p>Bonjour,</p><br><p>Veuillez cliquer sur le lien suivant pour reinitialiser votre mot de passe : <span><a href="http://localhost:3000/password-reinit/${token}">http://localhost:3000/password-reinit/${token}</a></span></p><br><p>Cordialement,</p><br><p>Katia Lemaire Sophrologue<br>22 rue des tisserands, 56190 Noyal-Muzillac<br>Tel: 07.60.31.10.52</p>`, // html body
+    html:     `<p>Bonjour,</p><br><p>Veuillez cliquer sur le lien suivant pour reinitialiser votre mot de passe : <span><a href="http://localhost:5173/reinit-mdp/${token}">http://localhost:5173/reinit-mdp/${token}</a></span></p><br>Ce lien sera valable pendant 25 minutes,au dela, il vous sera demander de reiterer votre demande de changement de mot de passe<p>Cordialement,</p><br><p>Katia Lemaire Sophrologue<br>22 rue des tisserands, 56190 Noyal-Muzillac<br>Tel: 07.60.31.10.52</p>`, // html body
   });
   
   console.log("Message sent: %s", info.messageId);

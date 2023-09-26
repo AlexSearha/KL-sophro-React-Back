@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const ACCESSSECRETPHRASE = process.env.JWT_ACCESS_SECRET;
 const REFRESHSECRETPHRASE = process.env.JWT_ACCESS_SECRET;
 const EMAILCONFIRMATIONPHRASE = process.env.JWT_EMAIL_CONFIRM_SECRET;
+const RESETPASSWORDPHRASE = process.env.JWT_RESET_PASSWORD;
 
 
 function generateLoginTokens(data) {
@@ -32,9 +33,18 @@ function generateEmailConfirmationToken(data){
   }, EMAILCONFIRMATIONPHRASE , { expiresIn: 25*60 });
 }
 
-async function confirmEmailToken(tokenToCheck){
+function generateResetPasswordToken(data){
+  const { email, id } = data;
+
+  return jwt.sign({
+    id: id,
+    email: email,
+  }, RESETPASSWORDPHRASE , { expiresIn: 25*60 });
+}
+
+async function confirmEmailtoken(tokenToCheck){
   return new Promise( (resolve, reject) => {
-    jwt.verify(tokenToCheck, EMAILCONFIRMATIONPHRASE, (err, decoded) => {
+    jwt.verify(tokenToCheck, RESETPASSWORDPHRASE, (err, decoded) => {
       if(err){
         reject('JWT expired');
       }
@@ -71,10 +81,13 @@ async function confirmAccessToken(tokenToCheck){
   })
 }
 
+
+
 module.exports = { 
+  generateResetPasswordToken,
   generateLoginTokens, 
   generateEmailConfirmationToken, 
-  confirmEmailToken, 
+  confirmEmailtoken,
   confirmRefreshToken, 
   confirmAccessToken 
 }

@@ -52,13 +52,11 @@ const clientController = {
         const body = req.body;
         const { email, password } = req.body;
         const passwordHash = hashMyPassword(password);
-        // console.log('email: ', email);
-        // console.log('passwordHash: ', passwordHash);
         
         try {
             const searchClient = await Client.findOne({where: { email: email }})
             if(searchClient){
-                return res.status(403).json({error: 'user already exist'});
+                return res.status(401).json({error: 'user already exist'});
             }
             const newClient = await Client.create(body);
             newClient.password = passwordHash;
@@ -78,7 +76,6 @@ const clientController = {
     updateOneClient: async (req, res) => {
         const { id } = req.params;
         const updateBody = req.body;
-        // console.log(updateBody.email);
 
         try {
 
@@ -107,36 +104,38 @@ const clientController = {
 
     deleteOneClient: async (req, res) => {
         const { id } = req.params;
-
-        try {
-            if(!req.user){
-                return res.status(401).json({error: "user must be connected"})
-            }
-            const { role } = req.user;
-
-            const client = await Client.findByPk(id);
-
-            if(role !== 2){
-                if(client.dataValues.id === id){
-                    await client.destroy();
-                    res.status(200).json({message: 'client successfully deleted'});
-                    
-                } else {
-                    
-                    return res.status(401).json({error: 'unauthorized action'});
-                }
-            } else {
-                await client.destroy();
-                res.status(200).json({message: 'client successfully deleted'});
-                
-            }
-
-        } catch (error) {
-
-            console.error("an error occurred :", error);
-            res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données." });
+        const val = req.user
+        console.log('val: ',val);
         
-        }
+        // try {
+        //     if(!req.user){
+        //         return res.status(401).json({error: "user must be connected"})
+        //     }
+        //     const { role } = req.user;
+
+        //     const client = await Client.findByPk(id);
+
+        //     if(role !== 2){
+        //         if(client.dataValues.id === id){
+        //             await client.destroy();
+        //             res.status(200).json({message: 'client successfully deleted'});
+                    
+        //         } else {
+                    
+        //             return res.status(401).json({error: 'unauthorized action'});
+        //         }
+        //     } else {
+        //         await client.destroy();
+        //         res.status(200).json({message: 'client successfully deleted'});
+                
+        //     }
+
+        // } catch (error) {
+
+        //     console.error("an error occurred :", error);
+        //     res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des données." });
+        
+        // }
     },
 
 }

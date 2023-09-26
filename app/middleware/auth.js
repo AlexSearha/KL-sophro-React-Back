@@ -15,13 +15,9 @@ const auth = {
                 next();
             }
         } else {
-            // console.log('JE RENTRE DANS LA VERIFICATION DU REFRESH TOKEN');
             if(refreshToken){
                 const isRefreshTokenValid = await confirmRefreshToken(refreshToken);
-                // console.log('RefreshToken Valide ? : ',isRefreshTokenValid);
                 const newAccessToken = generateNewAccessToken(isRefreshTokenValid)
-                // console.log('New Access Token : ', newAccessToken);
-                // console.log('ENvoi du token dans le headers :');
                 res.setHeader('Authorization', `Bearer ${newAccessToken}`);
                 next();
             }

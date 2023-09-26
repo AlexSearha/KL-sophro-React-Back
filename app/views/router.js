@@ -82,10 +82,10 @@ router.get('/confirm/:token', auth.confirmSubscription);
 router.post('/regen-token',authController.regenerateAccessToken)
 
 // RESET PASSWORD
-router.post('/reset-password', authController.sendTokenByEmail);
+router.post('/ask-new-password', authController.sendTokenByEmail);
 
-router.route('/reset-password/:token')
-  .get(authController.checkTokenBeforeResetPassword)
+router.route('/reset-password')
+  // .get(authController.checkTokenBeforeResetPassword)
   .post(authController.resetPassword);
 
 // CHECK PASSWORD
